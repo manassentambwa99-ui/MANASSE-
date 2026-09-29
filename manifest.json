@@ -1,0 +1,16 @@
+here{
+  "name": "MANASSE IA",
+  "short_name": "MANASSE IA",
+  "description": "Assistant intelligence artificielle MANASSE IA",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#050914",
+  "theme_color": "#050914",
+  "lang": "fr",
+  "orientation": "portrait",
+  "icons": [
+    { "src": "icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any" },
+    { "src": "icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "maskable" }
+  ]
+}
