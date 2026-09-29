@@ -1,5 +1,5 @@
-hereconst CACHE = 'manasse-ia-v1';
-const SHELL = ['./', './index.html', './manifest.json', './icon.svg'];
+const CACHE = 'manasse-ia-v2';
+const SHELL = ['./', './index.html', './manifest.json', './icon.svg', './icon-192.png', './icon-512.png', './icon-512-maskable.png'];
 
 self.addEventListener('install', e => {
   self.skipWaiting();
