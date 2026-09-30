@@ -1,30 +1,51 @@
-const CACHE = 'manasse-ia-v2';
-const SHELL = ['./', './index.html', './manifest.json', './icon.svg', './icon-192.png', './icon-512.png', './icon-512-maskable.png'];
+hereconst CACHE_NAME = 'manasse-ia-v1';
+const ASSETS_TO_CACHE = [
+  './',
+  './index.html',
+  './manifest.json',
+  './icon.svg',
+  './icon-512.png'
+];
 
-self.addEventListener('install', e => {
-  self.skipWaiting();
-  e.waitUntil(caches.open(CACHE).then(c => c.addAll(SHELL)));
-});
-
-self.addEventListener('activate', e => {
+// Installation : Mise en cache des fichiers de base
+self.addEventListener('install', (e) => {
   e.waitUntil(
-    caches.keys().then(keys => Promise.all(keys.filter(k => k !== CACHE).map(k => caches.delete(k))))
-      .then(() => clients.claim())
+    caches.open(CACHE_NAME).then((cache) => {
+      return cache.addAll(ASSETS_TO_CACHE);
+    }).then(() => self.skipWaiting())
   );
 });
 
-self.addEventListener('fetch', e => {
-  const req = e.request;
-  if (req.method !== 'GET') return;
-  const url = new URL(req.url);
-  // Ne jamais mettre en cache les appels à l'API : l'IA a besoin d'internet.
-  if (url.hostname.includes('groq.com')) return;
-  if (url.origin !== location.origin) return;
+// Activation : Nettoyage des anciens caches
+self.addEventListener('activate', (e) => {
+  e.waitUntil(
+    caches.keys().then((keys) => {
+      return Promise.all(
+        keys.map((key) => {
+          if (key !== CACHE_NAME) {
+            return caches.delete(key);
+          }
+        })
+      );
+    }).then(() => self.clients.claim())
+  );
+});
+
+// Interception des requêtes : Réponse depuis le cache si hors-ligne
+self.addEventListener('fetch', (e) => {
+  // On laisse passer normalement les requêtes API Groq vers le réseau
+  if (e.request.url.includes('api.groq.com')) {
+    return;
+  }
+
   e.respondWith(
-    caches.match(req).then(cached => cached || fetch(req).then(res => {
-      const copy = res.clone();
-      caches.open(CACHE).then(c => c.put(req, copy));
-      return res;
-    }).catch(() => cached))
+    caches.match(e.request).then((cachedResponse) => {
+      if (cachedResponse) {
+        return cachedResponse;
+      }
+      return fetch(e.request).then((networkResponse) => {
+        return networkResponse;
+      });
+    })
   );
 });
