@@ -58,8 +58,8 @@ header::after{content:'';position:absolute;left:0;right:0;bottom:-1px;height:2px
 .brand-sub{font-size:10px;color:#8cc8ff}
 main{position:relative;z-index:2;flex:1;overflow-y:auto;padding:16px 14px 8px;display:flex;flex-direction:column;gap:12px}
 .msg{max-width:86%;padding:11px 14px;border-radius:16px;font-size:14px;line-height:1.5;white-space:pre-wrap;word-break:break-word;animation:pop .35s ease}
-.msg a{color:#38d6ff;text-decoration:underline;font-weight:bold}
 @keyframes pop{from{opacity:0;transform:translateY(10px) scale(.97)}}
+.msg a{color:#38d6ff;text-decoration:underline;font-weight:bold}
 .msg.user{align-self:flex-end;background:linear-gradient(135deg,rgba(47,123,255,.5),rgba(56,214,255,.28));border:1px solid rgba(150,255,225,.3);border-bottom-right-radius:4px;box-shadow:0 0 18px rgba(47,123,255,.25)}
 .msg.bot{align-self:flex-start;background:rgba(170,205,255,.05);border:1px solid rgba(120,190,255,.2);border-bottom-left-radius:4px;box-shadow:inset 0 1px 0 rgba(210,232,255,.1),0 0 18px rgba(56,214,255,.08);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);position:relative;overflow:hidden}
 .msg.bot::before{content:'';position:absolute;top:0;left:-60%;width:40%;height:100%;background:linear-gradient(100deg,transparent,rgba(160,205,255,.12),transparent);animation:shine 5s ease-in-out infinite}
@@ -259,11 +259,7 @@ function systemPrompt() {
   let p = `Tu es ${APP_NAME}, un assistant conversationnel en français, chaleureux, clair et utile. ` +
     `Tu as été créé par ${CREATOR}. Si on te demande qui t'a créé, qui t'a développé, qui est ton créateur/fondateur, ou toute question allant dans ce sens, réponds que tu as été créé par ${CREATOR}, sans mentionner d'autre entreprise ou laboratoire comme créateur. ` +
     `Réponds toujours en français, sauf si la personne écrit clairement dans une autre langue et demande explicitement une réponse dans cette langue.` +
-    `\n\nSi l'utilisateur te demande d'ouvrir une application, génère une réponse HTML avec un lien <a href="..." target="_blank">Cliquer ici pour ouvrir</a> en utilisant l'un des domaines valides suivants :` +
-    `\n- WhatsApp: https://wa.me, https://api.whatsapp.com, https://chat.whatsapp.com ou https://www.whatsapp.com` +
-    `\n- Spotify: https://open.spotify.com, https://spotify.link ou https://www.spotify.com` +
-    `\n- MovieBox: https://moviebox.ph, https://moviebox.club ou https://v.moviebox.ph` +
-    `\n- TikTok: https://vm.tiktok.com, https://vt.tiktok.com ou https://www.tiktok.com`;
+    `\n\nTu peux ouvrir des applications sur le téléphone de l'utilisateur. Quand il te demande d'ouvrir ou de lancer WhatsApp, Spotify, MovieBox ou TikTok, réponds par une courte phrase de confirmation, puis ajoute à la toute fin, sur sa propre ligne, exactement une balise : [OUVRIR:whatsapp], [OUVRIR:spotify], [OUVRIR:moviebox] ou [OUVRIR:tiktok]. N'écris jamais de lien. Pour toute autre demande, n'écris jamais de balise.`;
   if (memories.length) p += `\n\nSouvenirs à long terme que l'utilisateur t'a demandé de retenir (utilise-les naturellement si pertinent) :\n- ` + memories.join('\n- ');
   p += `\n\nDate et heure actuelles : ${new Date().toLocaleString('fr-FR')}. Tu possèdes une vraie mémoire : tu retiens tout ce que l'utilisateur te confie et tu te réfères naturellement à ses informations personnelles et à vos discussions passées ci-dessous (ne dis jamais que tu ne peux pas te souvenir). Quand il te demande de retenir quelque chose, confirme brièvement.`;
   const pd = pastDigest(); if (pd) p += `\n\nExtraits de vos discussions précédentes :\n` + pd;
@@ -297,15 +293,9 @@ function addMsg(role, text, cls, img) {
   const el = document.createElement('div');
   el.className = 'msg ' + (role === 'user' ? 'user' : 'bot') + (cls ? ' ' + cls : '');
   if (img) { const i = document.createElement('img'); i.src = img; el.appendChild(i); }
-  
-  if (role === 'bot') {
-    el.innerHTML = text;
-  } else {
-    el.appendChild(document.createTextNode(text));
-  }
-
+  if (role === 'bot') { el.innerHTML = text; } else { el.appendChild(document.createTextNode(text)); }
   $('chat').appendChild(el);
-  $('chat').scrollTop =$('chat').scrollHeight;
+  $('chat').scrollTop = $('chat').scrollHeight;
   return el;
 }
 const WELCOME = '<div class="welcome" id="welcome"><div class="holo"><i></i><i></i><i></i><i></i><i></i><u></u><em>Ai</em></div><b>MANASSE IA</b><span class="stat">● SYSTÈME EN LIGNE</span><div class="greet" id="greet"></div><div class="chips" id="chips"></div></div>';
@@ -432,7 +422,10 @@ async function send() {
       if (r.status === 404) fetchModels();
       return;
     }
-    const reply = data.choices?.[0]?.message?.content?.trim() || '…';
+    let reply = data.choices?.[0]?.message?.content?.trim() || '…';
+    const tag = reply.match(/\[OUVRIR:(\w+)\]/i);
+    reply = reply.replace(/\[OUVRIR:\w+\]/gi, '').trim() || '…';
+    if (tag) setTimeout(() => openApp(tag[1]), 600);
     history.push({ role: 'assistant', content: reply });
     store.set('mi_history', history);
     addMsg('bot', reply);
@@ -448,12 +441,12 @@ async function send() {
 }
 
 /* ---------- Menu ---------- */
-function openMenu() { $('menu').classList.add('open');$('overlay').classList.add('open'); }
-function closeMenu() { $('menu').classList.remove('open');$('overlay').classList.remove('open'); }
+function openMenu() { $('menu').classList.add('open'); $('overlay').classList.add('open'); }
+function closeMenu() { $('menu').classList.remove('open'); $('overlay').classList.remove('open'); }
 
 /* ---------- Fenêtres modales ---------- */
 function showModal(html) { $('modal-body').innerHTML = html; $('modal').style.display = 'flex'; closeMenu(); }
-function closeModal() { $('modal-body').innerHTML = '';$('modal').style.display = 'none'; }
+function closeModal() { $('modal-body').innerHTML = ''; $('modal').style.display = 'none'; }
 
 function openSettings() {
   showModal(`
@@ -484,7 +477,7 @@ function saveSettings() {
   closeModal();
 }
 async function refreshModels() {
-  $('setOk').textContent = 'Actualisation…';$('setErr').textContent = '';
+  $('setOk').textContent = 'Actualisation…'; $('setErr').textContent = '';
   apiKey = $('keyField').value.trim() || apiKey;
   await fetchModels();
   $('modelField').innerHTML = modelList.map(m => `<option value="${esc(m.id)}">${esc(m.label)}</option>`).join('');
@@ -622,6 +615,23 @@ function pastDigest() {
   let out = '';
   list.forEach(({ c }) => { out += `[${new Date(c.ts).toLocaleDateString('fr-FR')}] ${c.title}\n` + c.messages.slice(-6).map(m => (m.role === 'user' ? 'Lui : ' : 'Toi : ') + m.content.slice(0, 220)).join('\n') + '\n\n'; });
   return out.slice(0, 3800);
+}
+
+/* ---------- Ouverture directe des applications ---------- */
+const APPS = {
+  whatsapp: { app: 'whatsapp://send', web: 'https://wa.me/' },
+  spotify:  { app: 'spotify://',      web: 'https://open.spotify.com' },
+  tiktok:   { app: 'tiktok://',       web: 'https://www.tiktok.com' },
+  moviebox: { app: null,              web: 'https://moviebox.ph' }
+};
+function openApp(key) {
+  const a = APPS[String(key).toLowerCase()]; if (!a) return;
+  if (!a.app) { location.href = a.web; return; }
+  let left = false; const gone = () => { left = true; };
+  document.addEventListener('visibilitychange', gone, { once: true });
+  addEventListener('pagehide', gone, { once: true });
+  location.href = a.app;
+  setTimeout(() => { if (!left && !document.hidden) location.href = a.web; }, 1600);
 }
 
 /* ---------- Démarrage ---------- */
