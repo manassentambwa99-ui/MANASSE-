@@ -151,6 +151,22 @@ select.field option{background:#050d1f;color:#fff}
 #composer{caret-color:#ff9a3c}
 .inputrow:focus-within{box-shadow:0 0 26px rgba(56,214,255,.3),0 0 0 1px rgba(56,214,255,.45)}
 @media (prefers-reduced-motion:reduce){.streak{animation:none}}
+
+.brand-sub{font-size:10px;font-weight:800;letter-spacing:2.5px;color:#38d6ff;text-shadow:0 0 10px rgba(56,214,255,.7);display:flex;align-items:center;gap:6px}
+.brand-sub::before{content:'';width:6px;height:6px;border-radius:50%;background:#ff9a3c;box-shadow:0 0 8px #ff9a3c;animation:blink 1.6s ease-in-out infinite}
+.brand-name{animation:flowline 6s linear infinite,flick 7s steps(1) infinite}
+@keyframes flick{0%,93%,97%,100%{filter:none}94%{filter:brightness(1.8) drop-shadow(0 0 8px #38d6ff)}96%{filter:brightness(.7)}}
+.inputrow{position:relative}
+.inputrow::before,.inputrow::after{content:'';position:absolute;width:14px;height:14px;pointer-events:none;border:2px solid #38d6ff;filter:drop-shadow(0 0 4px #38d6ff);opacity:.8}
+.inputrow::before{top:-3px;left:-3px;border-right:0;border-bottom:0;border-top-left-radius:10px}
+.inputrow::after{bottom:-3px;right:-3px;border-left:0;border-top:0;border-bottom-right-radius:10px;border-color:#ff9a3c;filter:drop-shadow(0 0 4px #ff9a3c)}
+.send-btn{animation:sendpulse 2.6s ease-in-out infinite}
+@keyframes sendpulse{0%,100%{box-shadow:0 4px 16px rgba(56,214,255,.45)}50%{box-shadow:0 4px 26px rgba(56,214,255,.9),0 0 0 6px rgba(56,214,255,.12)}}
+.msg.user::after{content:'';position:absolute;inset:0;border-radius:inherit;pointer-events:none;box-shadow:inset 0 0 14px rgba(56,214,255,.18)}
+.msg.user{position:relative}
+main::-webkit-scrollbar{width:4px}main::-webkit-scrollbar-thumb{background:linear-gradient(#38d6ff,#ff9a3c);border-radius:4px}
+.menu-item{transition:.2s}.menu-item:active,.menu-item:hover{background:linear-gradient(90deg,rgba(56,214,255,.18),transparent);padding-left:16px}
+@media (prefers-reduced-motion:reduce){.brand-name,.send-btn,.brand-sub::before{animation:none}}
 </style>
 </head>
 <body>
@@ -168,6 +184,7 @@ select.field option{background:#050d1f;color:#fff}
     <div class="core"><div class="ring"></div><div class="ring r2"></div><div class="brand-badge">Ai</div></div>
     <div style="min-width:0">
       <div class="brand-name">MANASSE IA</div>
+      <div class="brand-sub" id="model-label">…</div>
     </div>
   </div>
   <div class="icon-btn" onclick="newChat()" title="Nouvelle discussion"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg></div>
@@ -504,7 +521,7 @@ function openAbout() {
 
 function updateModelLabel() {
   const m = modelList.find(x => x.id === model);
-  $('model-label').textContent = (m ? m.label : model) + (memories.length ? ' · ' + memories.length + ' souvenir' + (memories.length > 1 ? 's' : '') : '');
+  $('model-label').textContent = 'MNLV1' + (memories.length ? ' · ' + memories.length + ' souvenir' + (memories.length > 1 ? 's' : '') : '');
 }
 
 /* ---------- Particules de flux ---------- */
