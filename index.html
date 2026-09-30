@@ -6,158 +6,186 @@
 <title>MANASSE IA</title>
 <link rel="manifest" href="manifest.json">
 <link rel="icon" href="icon.svg" type="image/svg+xml">
-<link rel="apple-touch-icon" href="icon-192.png">
+<link rel="apple-touch-icon" href="icon-512.jpg">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="MANASSE IA">
 <meta name="mobile-web-app-capable" content="yes">
-<meta name="theme-color" content="#03070a">
+<meta name="theme-color" content="#030814">
 <style>
-* { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
-:root { padding-top: env(safe-area-inset-top, 0); padding-bottom: env(safe-area-inset-bottom, 0); }
-html, body { height: 100%; }
-body {
-  background: radial-gradient(circle at 18% 0%, rgba(0,255,178,.14), transparent 42%),
-              radial-gradient(circle at 88% 10%, rgba(30,110,255,.26), transparent 50%),
-              radial-gradient(circle at 50% 100%, rgba(0,180,140,.14), transparent 55%),
-              #03070a;
-  color: #e9fff6;
-  display: flex; flex-direction: column;
-  overflow: hidden;
-  -webkit-tap-highlight-color: transparent;
-  position: relative;
-}
-input, textarea { user-select: text; -webkit-user-select: text; font-family: inherit; }
-.glass { background: linear-gradient(160deg, rgba(120,255,210,.09), rgba(20,60,90,.07)); border: 1px solid rgba(120,255,200,.16); box-shadow: inset 0 1px 0 rgba(200,255,235,.14), 0 8px 26px rgba(0,0,0,.45); backdrop-filter: blur(20px) saturate(170%); -webkit-backdrop-filter: blur(20px) saturate(170%); }
+*{box-sizing:border-box;margin:0;padding:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif}
+:root{padding-top:env(safe-area-inset-top,0);padding-bottom:env(safe-area-inset-bottom,0);--g:#38d6ff;--b:#2f7bff;--c:#00e0ff}
+html,body{height:100%}
+body{background:radial-gradient(circle at 18% 0%,rgba(56,214,255,.16),transparent 42%),radial-gradient(circle at 88% 10%,rgba(30,110,255,.28),transparent 50%),radial-gradient(circle at 50% 100%,rgba(255,130,40,.16),transparent 55%),#030814;color:#eaf4ff;display:flex;flex-direction:column;overflow:hidden;-webkit-tap-highlight-color:transparent;position:relative}
+input,textarea{user-select:text;-webkit-user-select:text;font-family:inherit}
+.glass{background:linear-gradient(160deg,rgba(130,190,255,.09),rgba(20,40,100,.07));border:1px solid rgba(120,190,255,.18);box-shadow:inset 0 1px 0 rgba(210,232,255,.14),0 8px 26px rgba(0,0,0,.45),0 0 24px rgba(56,214,255,.06);backdrop-filter:blur(20px) saturate(170%);-webkit-backdrop-filter:blur(20px) saturate(170%)}
+.orb{position:fixed;border-radius:50%;filter:blur(50px);opacity:.5;pointer-events:none;z-index:0;animation:float 17s ease-in-out infinite alternate}
+.orb.a{width:260px;height:260px;left:-90px;top:4%;background:radial-gradient(circle at 30% 30%,#38d6ff,transparent 70%)}
+.orb.b{width:300px;height:300px;right:-110px;top:42%;background:radial-gradient(circle at 30% 30%,#2f7bff,transparent 70%);animation-delay:-6s}
+.orb.c{width:220px;height:220px;left:20%;bottom:-80px;background:radial-gradient(circle at 30% 30%,#00e0ff,transparent 70%);animation-delay:-10s}
+@keyframes float{to{transform:translate(30px,-40px) scale(1.14)}}
+/* Grille holographique + scanlines */
+#grid{position:fixed;left:-50%;right:-50%;bottom:0;height:55%;z-index:0;pointer-events:none;opacity:.28;background-image:linear-gradient(rgba(56,214,255,.5) 1px,transparent 1px),linear-gradient(90deg,rgba(0,224,255,.5) 1px,transparent 1px);background-size:44px 44px;transform:perspective(420px) rotateX(62deg);transform-origin:bottom;animation:gridmove 4s linear infinite;-webkit-mask-image:linear-gradient(transparent,#000 70%);mask-image:linear-gradient(transparent,#000 70%)}
+@keyframes gridmove{to{background-position:0 44px}}
+#scan{position:fixed;inset:0;z-index:1;pointer-events:none;background:repeating-linear-gradient(0deg,rgba(56,214,255,.035) 0 1px,transparent 1px 3px)}
+#scan::after{content:'';position:absolute;left:0;right:0;height:90px;background:linear-gradient(transparent,rgba(56,214,255,.09),transparent);animation:scan 7s linear infinite}
+@keyframes scan{from{top:-100px}to{top:100%}}
+/* Vagues */
+.waves{position:fixed;left:0;bottom:0;width:100%;height:110px;z-index:0;pointer-events:none;overflow:hidden;opacity:.45}
+.waves svg{position:absolute;bottom:0;left:0;width:200%;height:100%;animation:wave 12s linear infinite}
+.waves svg+svg{animation-duration:8s;animation-direction:reverse;opacity:.7}
+@keyframes wave{to{transform:translateX(-50%)}}
+#flux{position:fixed;inset:0;z-index:0;pointer-events:none;opacity:.5;overflow:hidden}
+#flux::before,#flux::after{content:'';position:absolute;left:-20%;width:140%;height:1px;background:linear-gradient(90deg,transparent,rgba(56,214,255,.6),rgba(30,140,255,.6),transparent);animation:sweep 6s linear infinite}
+#flux::before{top:22%}#flux::after{top:68%;animation-duration:8s;animation-delay:-3s}
+@keyframes sweep{0%{transform:translateX(-30%);opacity:0}10%,90%{opacity:1}100%{transform:translateX(30%);opacity:0}}
+.particle{position:fixed;bottom:-10px;border-radius:50%;z-index:0;pointer-events:none;animation:rise linear infinite}
+@keyframes rise{to{transform:translateY(-115vh) translateX(var(--dx,0px));opacity:0}}
+@media (prefers-reduced-motion:reduce){.orb,#flux::before,#flux::after,.particle,#grid,#scan::after,.waves svg,.ring{animation:none!important}}
+header{position:relative;z-index:5;display:flex;align-items:center;justify-content:space-between;gap:10px;padding:calc(12px + env(safe-area-inset-top,0)) 14px 12px;border-bottom:1px solid rgba(120,190,255,.14);overflow:hidden}
+header::after{content:'';position:absolute;left:0;right:0;bottom:-1px;height:2px;background:linear-gradient(90deg,#38d6ff,#2f7bff,#ff9a3c,#2f7bff,#38d6ff);background-size:300% 100%;animation:flowline 5s linear infinite}
+@keyframes flowline{to{background-position:300% 0}}
+.icon-btn{width:38px;height:38px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:18px;cursor:pointer;background:rgba(56,214,255,.08);border:1px solid rgba(120,190,255,.22);flex-shrink:0;transition:box-shadow .2s}
+.icon-btn:active{transform:scale(.92);box-shadow:0 0 16px var(--g)}
+.brand{display:flex;align-items:center;gap:10px;min-width:0}
+.core{position:relative;width:42px;height:42px;flex-shrink:0;display:flex;align-items:center;justify-content:center}
+.ring{position:absolute;inset:0;border-radius:50%;border:2px solid transparent;border-top-color:var(--g);border-bottom-color:var(--b);animation:spin 3s linear infinite;filter:drop-shadow(0 0 6px var(--g))}
+.ring.r2{inset:4px;border-top-color:var(--c);border-bottom-color:transparent;border-left-color:var(--g);animation-duration:2s;animation-direction:reverse}
+@keyframes spin{to{transform:rotate(360deg)}}
+.brand-badge{width:26px;height:26px;border-radius:50%;background:linear-gradient(135deg,#38d6ff,#2f7bff);display:flex;align-items:center;justify-content:center;font-weight:900;font-size:11px;color:#03101f;box-shadow:0 0 16px rgba(56,214,255,.7);animation:pulse 2.4s ease-in-out infinite}
+@keyframes pulse{50%{box-shadow:0 0 26px rgba(56,214,255,1)}}
+.brand-name{font-weight:900;font-size:16px;letter-spacing:1px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;background:linear-gradient(90deg,#eaf4ff,#a9d8ff,#7fc4ff,#eaf4ff);background-size:250% 100%;-webkit-background-clip:text;background-clip:text;color:transparent;animation:flowline 6s linear infinite;text-shadow:0 0 18px rgba(56,214,255,.3)}
+.brand-sub{font-size:10px;color:#8cc8ff}
+main{position:relative;z-index:2;flex:1;overflow-y:auto;padding:16px 14px 8px;display:flex;flex-direction:column;gap:12px}
+.msg{max-width:86%;padding:11px 14px;border-radius:16px;font-size:14px;line-height:1.5;white-space:pre-wrap;word-break:break-word;animation:pop .35s ease}
+@keyframes pop{from{opacity:0;transform:translateY(10px) scale(.97)}}
+.msg.user{align-self:flex-end;background:linear-gradient(135deg,rgba(47,123,255,.5),rgba(56,214,255,.28));border:1px solid rgba(150,255,225,.3);border-bottom-right-radius:4px;box-shadow:0 0 18px rgba(47,123,255,.25)}
+.msg.bot{align-self:flex-start;background:rgba(170,205,255,.05);border:1px solid rgba(120,190,255,.2);border-bottom-left-radius:4px;box-shadow:inset 0 1px 0 rgba(210,232,255,.1),0 0 18px rgba(56,214,255,.08);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);position:relative;overflow:hidden}
+.msg.bot::before{content:'';position:absolute;top:0;left:-60%;width:40%;height:100%;background:linear-gradient(100deg,transparent,rgba(160,205,255,.12),transparent);animation:shine 5s ease-in-out infinite}
+@keyframes shine{to{left:130%}}
+.msg.bot.typing{color:#8cc8ff;font-style:italic}
+.msg.bot.typing::after{content:'';display:inline-block;width:6px;height:6px;margin-left:6px;border-radius:50%;background:#38d6ff;box-shadow:0 0 8px #38d6ff;animation:blink 1s ease-in-out infinite;position:static}
+@keyframes blink{0%,100%{opacity:.2}50%{opacity:1}}
+.msg.error{border-color:rgba(255,110,110,.4);color:#ffc7c7}
+.msg img{display:block;max-width:100%;max-height:220px;border-radius:12px;margin-bottom:8px;border:1px solid rgba(120,190,255,.3)}
+.welcome{text-align:center;margin:auto;padding:20px;color:#9cc4ff;font-size:13px}
+.welcome b{display:block;font-size:20px;color:#eaf4ff;margin-bottom:6px;letter-spacing:2px}
+.holo{width:96px;height:96px;margin:0 auto 14px;position:relative}
+.holo i{position:absolute;inset:0;border-radius:50%;border:1.5px solid transparent;border-top-color:var(--g);border-right-color:var(--b);animation:spin 4s linear infinite;filter:drop-shadow(0 0 8px var(--g))}
+.holo i:nth-child(2){inset:12px;border-top-color:var(--c);border-right-color:transparent;border-bottom-color:var(--g);animation-duration:3s;animation-direction:reverse}
+.holo i:nth-child(3){inset:26px;border-color:var(--b) transparent var(--c) transparent;animation-duration:2s}
+.holo::after{content:'';position:absolute;inset:38px;border-radius:50%;background:radial-gradient(circle,#fff,var(--g) 40%,transparent 70%);animation:pulse 2s ease-in-out infinite}
+.inputbar{position:relative;z-index:5;padding:10px 12px calc(10px + env(safe-area-inset-bottom,0));border-top:1px solid rgba(120,190,255,.14);overflow:hidden}
+.inputbar::before{content:'';position:absolute;left:0;right:0;top:-1px;height:2px;background:linear-gradient(90deg,#00e0ff,#38d6ff,#2f7bff,#00e0ff);background-size:300% 100%;animation:flowline 5s linear infinite reverse}
+.inputrow{display:flex;align-items:flex-end;gap:6px;border-radius:22px;padding:6px 6px 6px 8px;box-shadow:0 0 22px rgba(56,214,255,.12)}
+.tool{width:36px;height:36px;border-radius:50%;border:1px solid rgba(120,190,255,.25);background:rgba(56,214,255,.08);color:#eaf4ff;font-size:16px;cursor:pointer;flex-shrink:0}
+.tool.rec{background:linear-gradient(135deg,#a11f2e,#ff4f5e);animation:rec 1s ease-in-out infinite}
+@keyframes rec{0%,100%{box-shadow:0 0 0 0 rgba(255,79,94,.6)}50%{box-shadow:0 0 0 10px rgba(255,79,94,0)}}
+#composer{flex:1;background:transparent;border:0;outline:none;color:#eaf4ff;font-size:14px;resize:none;max-height:120px;line-height:1.4;padding:8px 0;min-width:0}
+#composer::placeholder{color:#6f86a8}
+.send-btn{width:38px;height:38px;border-radius:50%;border:0;background:linear-gradient(135deg,#38d6ff,#2f7bff);color:#03101f;font-size:16px;cursor:pointer;flex-shrink:0;box-shadow:0 4px 16px rgba(56,214,255,.45)}
+.send-btn:disabled{opacity:.4}
+#preview{display:none;align-items:center;gap:10px;margin-bottom:8px;padding:6px;border-radius:14px}
+#preview img{height:52px;border-radius:10px;border:1px solid rgba(120,190,255,.3)}
+#preview span{flex:1;font-size:12px;color:#8cc8ff}
+.footnote{text-align:center;font-size:10px;color:#6f86a8;margin-top:8px;line-height:1.5}
+.footnote b{color:#8cc8ff}
+#overlay{position:fixed;inset:0;background:rgba(2,5,14,.6);backdrop-filter:blur(4px);z-index:90;display:none}
+#menu{position:fixed;top:0;bottom:0;left:0;width:min(78%,300px);z-index:91;transform:translateX(-105%);transition:transform .25s ease;padding:calc(18px + env(safe-area-inset-top,0)) 16px 18px;display:flex;flex-direction:column;gap:6px;border-radius:0 22px 22px 0}
+#menu.open{transform:translateX(0)}#overlay.open{display:block}
+.menu-title{font-weight:900;font-size:15px;margin-bottom:10px;color:#8cc8ff;text-transform:uppercase;letter-spacing:.6px}
+.menu-item{display:flex;align-items:center;gap:12px;padding:12px 10px;border-radius:14px;font-size:14px;cursor:pointer}
+.menu-item:active{background:rgba(56,214,255,.12)}
+.menu-item .ic{width:22px;text-align:center}
+.menu-sep{height:1px;background:rgba(120,190,255,.14);margin:8px 0}
+.menu-foot{margin-top:auto;font-size:11px;color:#6f86a8;line-height:1.5}
+#modal{display:none;position:fixed;inset:0;z-index:200;background:rgba(2,5,14,.7);backdrop-filter:blur(10px);align-items:flex-end;justify-content:center}
+.sheet{width:100%;max-width:560px;max-height:88%;overflow-y:auto;padding:18px;border-radius:22px 22px 0 0;animation:pop .3s ease}
+.sheet h3{font-size:17px;font-weight:900;margin-bottom:4px}
+.sheet p.hint{font-size:12px;color:#8cc8ff;margin-bottom:14px;line-height:1.5}
+.close-btn{float:right;background:rgba(255,255,255,.08);border:1px solid rgba(120,190,255,.22);color:#fff;width:32px;height:32px;border-radius:50%;font-size:14px;cursor:pointer}
+.field-label{font-size:12px;color:#8cc8ff;margin:14px 0 6px;font-weight:700}
+.field,select.field{width:100%;padding:11px 14px;border-radius:14px;border:1px solid rgba(120,190,255,.22);background:rgba(255,255,255,.05);color:#fff;font-size:13px;outline:none}
+select.field option{background:#050d1f;color:#fff}
+.btn{display:inline-block;background:linear-gradient(135deg,#38d6ff,#2f7bff);border:1px solid rgba(210,232,255,.3);color:#03101f;padding:11px 20px;border-radius:22px;font-size:13px;font-weight:800;cursor:pointer;box-shadow:0 6px 20px rgba(56,214,255,.35)}
+.btn.alt{background:rgba(255,255,255,.07);color:#eaf4ff;box-shadow:none}
+.actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:16px}
+.err{color:#ff9a9a;font-size:12px;margin-top:8px;min-height:14px}
+.ok{color:#8cc8ff;font-size:12px;margin-top:8px;min-height:14px}
+.mem-item{display:flex;justify-content:space-between;gap:8px;align-items:flex-start;padding:10px 0;border-top:1px solid rgba(120,190,255,.12);font-size:13px}
+.mem-item span{flex:1;line-height:1.4;cursor:pointer}
+.mem-item small{display:block;color:#6f86a8;font-size:11px;margin-top:2px}
+.mem-item button{background:rgba(255,255,255,.07);border:1px solid rgba(120,190,255,.2);color:#ff9a9a;width:28px;height:28px;border-radius:50%;flex-shrink:0;cursor:pointer}
+.mem-item.cur span{color:#38d6ff}
 
-/* Sphères de fond */
-.orb { position: fixed; border-radius: 50%; filter: blur(50px); opacity: .5; pointer-events: none; z-index: 0; animation: float 17s ease-in-out infinite alternate; }
-.orb.a { width: 260px; height: 260px; left: -90px; top: 4%; background: radial-gradient(circle at 30% 30%, #00ffb2, transparent 70%); }
-.orb.b { width: 300px; height: 300px; right: -110px; top: 42%; background: radial-gradient(circle at 30% 30%, #1b6dff, transparent 70%); animation-delay: -6s; }
-.orb.c { width: 220px; height: 220px; left: 20%; bottom: -80px; background: radial-gradient(circle at 30% 30%, #00e0ff, transparent 70%); animation-delay: -10s; }
-@keyframes float { to { transform: translate(30px, -40px) scale(1.14); } }
+.tool svg,.icon-btn svg,.send-btn svg,.ic svg{width:19px;height:19px;stroke:currentColor;fill:none;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round;display:block;margin:auto}
+.icon-btn,.tool{color:#a9d8ff;transition:.2s}.tool:active,.icon-btn:active{color:#fff;box-shadow:0 0 18px var(--c)}
+.tool{display:flex;align-items:center;justify-content:center}.tool.rec{color:#fff}
+.send-btn{display:flex;align-items:center;justify-content:center}.send-btn svg{width:18px;height:18px}
+.ic svg{width:20px;height:20px;color:#8cc8ff}
+.orb.b{background:radial-gradient(circle at 30% 30%,#ff8a3a,transparent 70%);opacity:.3}
+.welcome .holo{width:240px;height:240px;margin:0 auto 18px}
+.welcome .holo::after{display:none}
+.welcome .holo i{position:absolute;border-radius:50%;border:1.5px dashed rgba(90,170,255,.75);filter:drop-shadow(0 0 6px #3a8bff);animation:spin 24s linear infinite}
+.welcome .holo i:nth-child(1){inset:0;border-width:2px;border-style:solid;border-color:rgba(60,140,255,.25) rgba(0,224,255,.9) rgba(60,140,255,.25) rgba(60,140,255,.25);animation-duration:6s}
+.welcome .holo i:nth-child(1)::before{content:'';position:absolute;top:-4px;left:50%;width:7px;height:7px;border-radius:50%;background:#fff;box-shadow:0 0 12px #4aa3ff}
+.welcome .holo i:nth-child(2){inset:16px;animation-direction:reverse;animation-duration:18s}
+.welcome .holo i:nth-child(3){inset:34px;border-style:dotted;border-color:rgba(56,214,255,.8);animation-duration:12s}
+.welcome .holo i:nth-child(4){inset:52px;border-width:3px;border-style:double;animation-direction:reverse;animation-duration:9s}
+.welcome .holo i:nth-child(5){inset:70px;border-style:dashed;border-color:rgba(255,150,70,.8);animation-duration:5s}
+.welcome .holo em{position:absolute;inset:88px;display:flex;align-items:center;justify-content:center;font-style:normal;font-weight:900;font-size:32px;color:#fff;background:rgba(4,14,40,.75);border:1px solid rgba(200,230,255,.6);text-shadow:0 0 12px #4aa3ff,0 0 28px #2f7bff;box-shadow:0 0 28px rgba(40,120,255,.6),inset 0 0 18px rgba(40,120,255,.3);animation:pulse 2.4s ease-in-out infinite}
+.welcome .holo u{position:absolute;left:-46px;right:-46px;top:50%;height:2px;background:linear-gradient(90deg,transparent,#ff9a4a,#fff,#ff9a4a,transparent);filter:drop-shadow(0 0 10px #ff7a2a);animation:flare 3s ease-in-out infinite}
+@keyframes flare{50%{opacity:.3;transform:scaleX(.65)}}
+.stat{display:block;font-size:10px;letter-spacing:3px;color:#4aa3ff;margin-bottom:10px;animation:blink 1.6s ease-in-out infinite}
+.glass{box-shadow:inset 0 1px 0 rgba(210,232,255,.14),0 8px 26px rgba(0,0,0,.45),0 0 26px rgba(40,140,255,.12)}
 
-/* Flux d'énergie type HUD futuriste */
-#flux { position: fixed; inset: 0; z-index: 0; pointer-events: none; opacity: .5; overflow: hidden; }
-#flux::before, #flux::after {
-  content: ''; position: absolute; left: -20%; width: 140%; height: 1px;
-  background: linear-gradient(90deg, transparent, rgba(0,255,178,.55), rgba(30,140,255,.55), transparent);
-  animation: sweep 6s linear infinite;
-}
-#flux::before { top: 22%; }
-#flux::after { top: 68%; animation-duration: 8s; animation-delay: -3s; }
-@keyframes sweep { 0% { transform: translateX(-30%); opacity: 0; } 10% { opacity: 1; } 90% { opacity: 1; } 100% { transform: translateX(30%); opacity: 0; } }
-.particle { position: fixed; bottom: -10px; border-radius: 50%; z-index: 0; pointer-events: none; animation: rise linear infinite; }
-@keyframes rise { to { transform: translateY(-115vh) translateX(var(--dx, 0px)); opacity: 0; } }
-@media (prefers-reduced-motion: reduce) { .orb, #flux::before, #flux::after, .particle { animation: none !important; } }
-
-/* Barre du haut */
-header {
-  position: relative; z-index: 5;
-  display: flex; align-items: center; justify-content: space-between; gap: 10px;
-  padding: calc(12px + env(safe-area-inset-top,0)) 14px 12px;
-  border-bottom: 1px solid rgba(120,255,200,.14);
-  overflow: hidden;
-}
-header::after {
-  content: ''; position: absolute; left: 0; right: 0; bottom: -1px; height: 2px;
-  background: linear-gradient(90deg, #00ffb2, #1b6dff, #00e0ff, #00ffb2); background-size: 300% 100%;
-  animation: flowline 5s linear infinite;
-}
-@keyframes flowline { to { background-position: 300% 0; } }
-.icon-btn { width: 38px; height: 38px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 18px; cursor: pointer; background: rgba(0,255,178,.08); border: 1px solid rgba(120,255,200,.2); flex-shrink: 0; }
-.icon-btn:active { transform: scale(.92); }
-.brand { display: flex; align-items: center; gap: 10px; min-width: 0; }
-.brand-badge { width: 34px; height: 34px; border-radius: 10px; background: linear-gradient(135deg,#00ffb2,#1b6dff); display: flex; align-items: center; justify-content: center; font-weight: 900; font-size: 15px; color: #04140f; box-shadow: 0 0 16px rgba(0,255,178,.55); flex-shrink: 0; }
-.brand-name { font-weight: 900; font-size: 16px; letter-spacing: .5px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; background: linear-gradient(90deg,#e9fff6,#8affe0); -webkit-background-clip: text; background-clip: text; color: transparent; text-shadow: 0 0 18px rgba(0,255,178,.3); }
-.brand-sub { font-size: 10px; color: #7fe9c9; }
-
-/* Zone de discussion */
-main { position: relative; z-index: 2; flex: 1; overflow-y: auto; padding: 16px 14px 8px; display: flex; flex-direction: column; gap: 12px; }
-.msg { max-width: 86%; padding: 11px 14px; border-radius: 16px; font-size: 14px; line-height: 1.5; white-space: pre-wrap; word-break: break-word; }
-.msg.user { align-self: flex-end; background: linear-gradient(135deg, rgba(27,109,255,.5), rgba(0,255,178,.28)); border: 1px solid rgba(150,255,225,.28); border-bottom-right-radius: 4px; }
-.msg.bot { align-self: flex-start; background: rgba(180,255,230,.05); border: 1px solid rgba(120,255,200,.16); border-bottom-left-radius: 4px; box-shadow: inset 0 1px 0 rgba(200,255,235,.1); }
-.msg.bot.typing { color: #7fe9c9; font-style: italic; }
-.msg.bot.typing::after { content: ''; display: inline-block; width: 6px; height: 6px; margin-left: 6px; border-radius: 50%; background: #00ffb2; box-shadow: 0 0 8px #00ffb2; animation: blink 1s ease-in-out infinite; }
-@keyframes blink { 0%,100% { opacity: .2; } 50% { opacity: 1; } }
-.msg.error { border-color: rgba(255,110,110,.4); color: #ffc7c7; }
-.welcome { text-align: center; margin: auto; padding: 20px; color: #9fe9cf; font-size: 13px; }
-.welcome b { display: block; font-size: 20px; color: #e9fff6; margin-bottom: 6px; }
-
-/* Bas : saisie + message légal */
-.inputbar { position: relative; z-index: 5; padding: 10px 12px calc(10px + env(safe-area-inset-bottom,0)); border-top: 1px solid rgba(120,255,200,.14); overflow: hidden; }
-.inputbar::before {
-  content: ''; position: absolute; left: 0; right: 0; top: -1px; height: 2px;
-  background: linear-gradient(90deg, #00e0ff, #00ffb2, #1b6dff, #00e0ff); background-size: 300% 100%;
-  animation: flowline 5s linear infinite reverse;
-}
-.inputrow { display: flex; align-items: flex-end; gap: 8px; border-radius: 22px; padding: 6px 6px 6px 16px; }
-#composer { flex: 1; background: transparent; border: 0; outline: none; color: #e9fff6; font-size: 14px; resize: none; max-height: 120px; line-height: 1.4; padding: 8px 0; }
-#composer::placeholder { color: #6f9c8f; }
-.send-btn { width: 38px; height: 38px; border-radius: 50%; border: 0; background: linear-gradient(135deg,#00ffb2,#1b6dff); color: #04140f; font-size: 16px; cursor: pointer; flex-shrink: 0; box-shadow: 0 4px 16px rgba(0,255,178,.45); }
-.send-btn:disabled { opacity: .4; }
-.footnote { text-align: center; font-size: 10px; color: #5f8a7d; margin-top: 8px; line-height: 1.5; }
-.footnote b { color: #7fe9c9; }
-
-/* Menu latéral */
-#overlay { position: fixed; inset: 0; background: rgba(1,4,3,.6); backdrop-filter: blur(4px); z-index: 90; display: none; }
-#menu { position: fixed; top: 0; bottom: 0; left: 0; width: min(78%, 300px); z-index: 91; transform: translateX(-105%); transition: transform .25s ease; padding: calc(18px + env(safe-area-inset-top,0)) 16px 18px; display: flex; flex-direction: column; gap: 6px; border-radius: 0 22px 22px 0; }
-#menu.open { transform: translateX(0); }
-#overlay.open { display: block; }
-.menu-title { font-weight: 900; font-size: 15px; margin-bottom: 10px; color: #7fe9c9; text-transform: uppercase; letter-spacing: .6px; }
-.menu-item { display: flex; align-items: center; gap: 12px; padding: 12px 10px; border-radius: 14px; font-size: 14px; cursor: pointer; }
-.menu-item:active { background: rgba(0,255,178,.1); }
-.menu-item .ic { width: 22px; text-align: center; }
-.menu-sep { height: 1px; background: rgba(120,255,200,.14); margin: 8px 0; }
-.menu-foot { margin-top: auto; font-size: 11px; color: #5f8a7d; line-height: 1.5; }
-
-/* Fenêtres modales */
-#modal { display: none; position: fixed; inset: 0; z-index: 200; background: rgba(1,4,3,.7); backdrop-filter: blur(10px); align-items: flex-end; justify-content: center; }
-.sheet { width: 100%; max-width: 560px; max-height: 88%; overflow-y: auto; padding: 18px; border-radius: 22px 22px 0 0; }
-.sheet h3 { font-size: 17px; font-weight: 900; margin-bottom: 4px; }
-.sheet p.hint { font-size: 12px; color: #7fe9c9; margin-bottom: 14px; line-height: 1.5; }
-.close-btn { float: right; background: rgba(255,255,255,.08); border: 1px solid rgba(120,255,200,.22); color: #fff; width: 32px; height: 32px; border-radius: 50%; font-size: 14px; cursor: pointer; }
-.field-label { font-size: 12px; color: #7fe9c9; margin: 14px 0 6px; font-weight: 700; }
-.field, select.field { width: 100%; padding: 11px 14px; border-radius: 14px; border: 1px solid rgba(120,255,200,.22); background: rgba(255,255,255,.05); color: #fff; font-size: 13px; outline: none; }
-select.field option { background: #03110d; color: #fff; }
-.btn { display: inline-block; background: linear-gradient(135deg,#00ffb2,#1b6dff); border: 1px solid rgba(200,255,235,.3); color: #04140f; padding: 11px 20px; border-radius: 22px; font-size: 13px; font-weight: 800; cursor: pointer; box-shadow: 0 6px 20px rgba(0,255,178,.35); }
-.btn.alt { background: rgba(255,255,255,.07); color: #e9fff6; box-shadow: none; }
-.btn.danger { background: linear-gradient(135deg,#a11f2e,#ff4f5e); color: #fff; }
-.actions { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 16px; }
-.err { color: #ff9a9a; font-size: 12px; margin-top: 8px; min-height: 14px; }
-.ok { color: #7fe9c9; font-size: 12px; margin-top: 8px; min-height: 14px; }
-.mem-item { display: flex; justify-content: space-between; gap: 8px; align-items: flex-start; padding: 10px 0; border-top: 1px solid rgba(120,255,200,.12); font-size: 13px; }
-.mem-item span { flex: 1; line-height: 1.4; }
-.mem-item button { background: rgba(255,255,255,.07); border: 1px solid rgba(120,255,200,.2); color: #ff9a9a; width: 28px; height: 28px; border-radius: 50%; flex-shrink: 0; cursor: pointer; }
+.streak{position:fixed;left:-10%;right:-10%;top:47%;height:3px;z-index:0;pointer-events:none;background:linear-gradient(90deg,transparent,#ff9a3c 40%,#fff 50%,#ff9a3c 60%,transparent);filter:blur(1px) drop-shadow(0 0 14px #ff7a2a);opacity:.5;animation:streak 5s ease-in-out infinite}
+@keyframes streak{50%{opacity:.12;transform:scaleX(.7)}}
+.greet{max-width:330px;min-height:70px;margin:0 auto 14px;padding:12px 14px;text-align:left;font-size:14px;line-height:1.5;color:#eaf4ff;border-radius:16px;border:1px solid rgba(120,190,255,.28);background:rgba(120,170,255,.07);box-shadow:0 0 24px rgba(47,123,255,.25),inset 0 1px 0 rgba(210,232,255,.15);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px)}
+.chips{display:flex;flex-wrap:wrap;gap:8px;justify-content:center}
+.chip{padding:9px 14px;border-radius:20px;border:1px solid rgba(255,154,60,.45);background:rgba(255,140,50,.08);color:#ffd2a8;font-size:12px;cursor:pointer;transition:.2s}
+.chip:active{background:rgba(255,140,50,.3);box-shadow:0 0 16px #ff9a3c}
+.toast{position:fixed;top:calc(70px + env(safe-area-inset-top,0));left:50%;transform:translate(-50%,-20px);z-index:300;padding:10px 16px;border-radius:20px;font-size:12px;color:#eaf4ff;opacity:0;transition:.35s;pointer-events:none;border:1px solid rgba(255,154,60,.5);background:rgba(10,20,45,.9);box-shadow:0 0 20px rgba(255,154,60,.35);backdrop-filter:blur(12px)}
+.toast.show{opacity:1;transform:translate(-50%,0)}
+.msg.bot.typing::after{background:#ff9a3c;box-shadow:0 0 10px #ff9a3c}
+#composer{caret-color:#ff9a3c}
+.inputrow:focus-within{box-shadow:0 0 26px rgba(56,214,255,.3),0 0 0 1px rgba(56,214,255,.45)}
+@media (prefers-reduced-motion:reduce){.streak{animation:none}}
 </style>
 </head>
 <body>
 <div class="orb a"></div><div class="orb b"></div><div class="orb c"></div>
-<div id="flux"></div>
+<div id="grid"></div><div id="flux"></div><div class="streak"></div>
+<div class="waves">
+  <svg viewBox="0 0 2400 120" preserveAspectRatio="none"><path d="M0 60Q150 10 300 60T600 60T900 60T1200 60T1500 60T1800 60T2100 60T2400 60V120H0Z" fill="rgba(56,214,255,.22)"/></svg>
+  <svg viewBox="0 0 2400 120" preserveAspectRatio="none"><path d="M0 70Q200 110 400 70T800 70T1200 70T1600 70T2000 70T2400 70V120H0Z" fill="rgba(47,123,255,.25)"/></svg>
+</div>
+<div id="scan"></div>
 
 <header class="glass">
-  <div class="icon-btn" onclick="openMenu()">☰</div>
+  <div class="icon-btn" onclick="openMenu()"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 6h18M3 12h18M3 18h18"/></svg></div>
   <div class="brand">
-    <div class="brand-badge">Ai</div>
+    <div class="core"><div class="ring"></div><div class="ring r2"></div><div class="brand-badge">Ai</div></div>
     <div style="min-width:0">
       <div class="brand-name">MANASSE IA</div>
       <div class="brand-sub" id="model-label">…</div>
     </div>
   </div>
-  <div class="icon-btn" onclick="newChat()" title="Nouvelle discussion">＋</div>
+  <div class="icon-btn" onclick="newChat()" title="Nouvelle discussion"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg></div>
 </header>
 
 <main id="chat">
-  <div class="welcome" id="welcome">
-    <b>MANASSE IA</b>
-    Pose ta question pour commencer une discussion.
-  </div>
+  <div class="welcome" id="welcome"><div class="holo"><i></i><i></i><i></i><i></i><i></i><u></u><em>Ai</em></div><b>MANASSE IA</b><span class="stat">● SYSTÈME EN LIGNE</span><div class="greet" id="greet"></div><div class="chips" id="chips"></div></div>
 </main>
 
 <div class="inputbar glass">
+  <div id="preview" class="glass"><img id="prevImg" alt=""><span>Photo prête à envoyer</span><button class="tool" onclick="clearImg()">✕</button></div>
   <div class="inputrow">
+    <input type="file" id="fileIn" accept="image/*" hidden>
+    <button class="tool" onclick="$('fileIn').click()" title="Envoyer une photo"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg></button>
+    <button class="tool" id="micBtn" onclick="toggleMic()" title="Saisie vocale"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="9" y="2" width="6" height="12" rx="3"/><path d="M19 10v2a7 7 0 0 1-14 0v-2M12 19v3"/></svg></button>
     <textarea id="composer" rows="1" placeholder="Écris un message…"></textarea>
-    <button class="send-btn" id="sendBtn" onclick="send()">➤</button>
+    <button class="send-btn" id="sendBtn" onclick="send()"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M22 2 11 13M22 2l-7 20-4-9-9-4z"/></svg></button>
   </div>
   <div class="footnote"><b>Créé par Manassé Ntambwa</b><br>MANASSE IA peut se tromper. Vérifie les informations importantes.</div>
 </div>
@@ -165,12 +193,13 @@ select.field option { background: #03110d; color: #fff; }
 <div id="overlay" onclick="closeMenu()"></div>
 <nav id="menu" class="glass">
   <div class="menu-title">Menu</div>
-  <div class="menu-item" onclick="newChat()"><span class="ic">＋</span> Nouvelle discussion</div>
-  <div class="menu-item" onclick="openMemory()"><span class="ic">🧠</span> Mémoire à long terme</div>
-  <div class="menu-item" onclick="openSettings()"><span class="ic">⚙️</span> Réglages</div>
+  <div class="menu-item" onclick="newChat()"><span class="ic"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg></span> Nouvelle discussion</div>
+  <div class="menu-item" onclick="openHistory()"><span class="ic"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 12a9 9 0 1 0 3-6.7L3 8M3 3v5h5M12 7v5l3 2"/></svg></span> Historique</div>
+  <div class="menu-item" onclick="openMemory()"><span class="ic"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="4" width="16" height="16" rx="2"/><rect x="9" y="9" width="6" height="6"/><path d="M9 1v3M15 1v3M9 20v3M15 20v3M20 9h3M20 14h3M1 9h3M1 14h3"/></svg></span> Mémoire à long terme</div>
+  <div class="menu-item" onclick="openSettings()"><span class="ic"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 21v-7M4 10V3M12 21v-9M12 8V3M20 21v-5M20 12V3M1 14h6M9 8h6M17 16h6"/></svg></span> Réglages</div>
   <div class="menu-sep"></div>
-  <div class="menu-item" onclick="if(confirm('Effacer cette discussion ?'))newChat()"><span class="ic">🗑</span> Effacer la discussion</div>
-  <div class="menu-item" onclick="openAbout()"><span class="ic">ℹ️</span> À propos</div>
+  <div class="menu-item" onclick="if(confirm('Effacer cette discussion ?'))deleteChat()"><span class="ic"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 6h18M8 6V4h8v2M19 6l-1 14H6L5 6M10 11v6M14 11v6"/></svg></span> Effacer la discussion</div>
+  <div class="menu-item" onclick="openAbout()"><span class="ic"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg></span> À propos</div>
   <div class="menu-foot">MANASSE IA<br>Créé par Manassé Ntambwa</div>
 </nav>
 
@@ -188,6 +217,7 @@ const store = {
 
 const CREATOR = 'Manassé Ntambwa';
 const APP_NAME = 'MANASSE IA';
+const VISION_MODEL = 'meta-llama/llama-4-scout-17b-16e-instruct'; // utilisé uniquement quand une photo est jointe
 
 /* La clé API n'est jamais écrite dans ce fichier : elle est saisie une
    seule fois dans Réglages et reste uniquement dans le stockage local de
@@ -204,12 +234,17 @@ let model = store.get('mi_model', '');
 let modelList = store.get('mi_model_list', FALLBACK_MODELS);
 let history = store.get('mi_history', []);
 let memories = store.get('mi_memories', []);
+let convs = store.get('mi_convs', []);   // historique des discussions
+let curId = store.get('mi_cur', null);   // discussion en cours
+let pendingImg = null;                   // photo en attente d'envoi
 
 function systemPrompt() {
   let p = `Tu es ${APP_NAME}, un assistant conversationnel en français, chaleureux, clair et utile. ` +
     `Tu as été créé par ${CREATOR}. Si on te demande qui t'a créé, qui t'a développé, qui est ton créateur/fondateur, ou toute question allant dans ce sens, réponds que tu as été créé par ${CREATOR}, sans mentionner d'autre entreprise ou laboratoire comme créateur. ` +
     `Réponds toujours en français, sauf si la personne écrit clairement dans une autre langue et demande explicitement une réponse dans cette langue.`;
   if (memories.length) p += `\n\nSouvenirs à long terme que l'utilisateur t'a demandé de retenir (utilise-les naturellement si pertinent) :\n- ` + memories.join('\n- ');
+  p += `\n\nDate et heure actuelles : ${new Date().toLocaleString('fr-FR')}. Tu possèdes une vraie mémoire : tu retiens tout ce que l'utilisateur te confie et tu te réfères naturellement à ses informations personnelles et à vos discussions passées ci-dessous (ne dis jamais que tu ne peux pas te souvenir). Quand il te demande de retenir quelque chose, confirme brièvement.`;
+  const pd = pastDigest(); if (pd) p += `\n\nExtraits de vos discussions précédentes :\n` + pd;
   return p;
 }
 
@@ -235,19 +270,96 @@ async function fetchModels() {
 if (!model) model = (modelList[0] && modelList[0].id) || '';
 
 /* ---------- Rendu des messages ---------- */
-function addMsg(role, text, cls) {
-  $('welcome').style.display = 'none';
+function addMsg(role, text, cls, img) {
+  const w = $('welcome'); if (w) w.style.display = 'none';
   const el = document.createElement('div');
   el.className = 'msg ' + (role === 'user' ? 'user' : 'bot') + (cls ? ' ' + cls : '');
-  el.textContent = text;
+  if (img) { const i = document.createElement('img'); i.src = img; el.appendChild(i); }
+  el.appendChild(document.createTextNode(text));
   $('chat').appendChild(el);
   $('chat').scrollTop = $('chat').scrollHeight;
   return el;
 }
+const WELCOME = '<div class="welcome" id="welcome"><div class="holo"><i></i><i></i><i></i><i></i><i></i><u></u><em>Ai</em></div><b>MANASSE IA</b><span class="stat">● SYSTÈME EN LIGNE</span><div class="greet" id="greet"></div><div class="chips" id="chips"></div></div>';
 function renderHistory() {
   $('chat').innerHTML = '';
-  if (!history.length) { $('chat').innerHTML = '<div class="welcome" id="welcome"><b>MANASSE IA</b>Pose ta question pour commencer une discussion.</div>'; return; }
+  if (!history.length) { $('chat').innerHTML = WELCOME; greet(); return; }
   history.forEach(m => addMsg(m.role, m.content));
+}
+
+/* ---------- Historique des discussions (sauvegarde auto) ---------- */
+function saveCurrent() {
+  if (!history.length) return;
+  if (!curId) { curId = 'c' + Date.now(); store.set('mi_cur', curId); }
+  const first = (history.find(m => m.role === 'user') || {}).content || 'Discussion';
+  const conv = { id: curId, title: first.replace(/^📷 /, '').slice(0, 42), ts: Date.now(), messages: history.slice(-60) };
+  const i = convs.findIndex(c => c.id === curId);
+  if (i >= 0) convs[i] = conv; else convs.unshift(conv);
+  convs = convs.slice(0, 50);
+  store.set('mi_convs', convs);
+}
+function resetCurrent() { history = []; curId = null; store.set('mi_history', history); store.set('mi_cur', null); renderHistory(); }
+function newChat() { saveCurrent(); resetCurrent(); closeMenu(); }
+function deleteChat() { convs = convs.filter(c => c.id !== curId); store.set('mi_convs', convs); resetCurrent(); closeMenu(); }
+function openHistory() {
+  showModal(`<h3>🕘 Historique</h3><p class="hint">Touche une discussion pour la reprendre là où tu l'avais laissée.</p><div id="hList"></div>`);
+  const box = $('hList');
+  if (!convs.length) { box.innerHTML = '<p class="hint">Aucune discussion enregistrée pour le moment.</p>'; return; }
+  convs.slice().sort((a, b) => b.ts - a.ts).forEach(c => {
+    const r = document.createElement('div'); r.className = 'mem-item' + (c.id === curId ? ' cur' : '');
+    r.innerHTML = '<span></span><button>✕</button>';
+    const s = r.querySelector('span');
+    s.textContent = c.title;
+    const sm = document.createElement('small');
+    sm.textContent = new Date(c.ts).toLocaleString('fr-FR', { dateStyle: 'short', timeStyle: 'short' }) + ' · ' + c.messages.length + ' messages';
+    s.appendChild(sm);
+    s.onclick = () => openConv(c.id);
+    r.querySelector('button').onclick = () => { convs = convs.filter(x => x.id !== c.id); store.set('mi_convs', convs); if (c.id === curId) resetCurrent(); openHistory(); };
+    box.appendChild(r);
+  });
+}
+function openConv(id) {
+  const c = convs.find(x => x.id === id); if (!c) return;
+  if (curId !== id) saveCurrent();
+  history = c.messages.slice(); curId = id;
+  store.set('mi_history', history); store.set('mi_cur', curId);
+  renderHistory(); closeModal();
+}
+
+/* ---------- Photos ---------- */
+$('fileIn').addEventListener('change', e => {
+  const f = e.target.files[0]; if (!f) return;
+  const rd = new FileReader();
+  rd.onload = () => {
+    const im = new Image();
+    im.onload = () => {
+      const s = Math.min(1, 1024 / Math.max(im.width, im.height));
+      const cv = document.createElement('canvas'); cv.width = im.width * s; cv.height = im.height * s;
+      cv.getContext('2d').drawImage(im, 0, 0, cv.width, cv.height);
+      pendingImg = cv.toDataURL('image/jpeg', 0.75);
+      $('prevImg').src = pendingImg; $('preview').style.display = 'flex';
+    };
+    im.src = rd.result;
+  };
+  rd.readAsDataURL(f); e.target.value = '';
+});
+function clearImg() { pendingImg = null; $('preview').style.display = 'none'; }
+
+/* ---------- Saisie vocale ---------- */
+let rec = null, listening = false;
+function toggleMic() {
+  const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+  if (!SR) { alert("La saisie vocale n'est pas prise en charge par ce navigateur."); return; }
+  if (listening) { rec.stop(); return; }
+  rec = new SR(); rec.lang = 'fr-FR'; rec.interimResults = true; rec.continuous = false;
+  const base = composer.value ? composer.value + ' ' : '';
+  rec.onstart = () => { listening = true; $('micBtn').classList.add('rec'); };
+  rec.onresult = e => {
+    composer.value = base + Array.from(e.results).map(r => r[0].transcript).join('');
+    composer.dispatchEvent(new Event('input'));
+  };
+  rec.onend = rec.onerror = () => { listening = false; $('micBtn').classList.remove('rec'); };
+  rec.start();
 }
 
 /* ---------- Envoi à l'API Groq ---------- */
@@ -256,14 +368,21 @@ composer.addEventListener('input', () => { composer.style.height = 'auto'; compo
 composer.addEventListener('keydown', e => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); send(); } });
 
 async function send() {
-  const text = composer.value.trim();
-  if (!text) return;
+  let text = composer.value.trim();
+  if (!text && !pendingImg) return;
   if (!apiKey) { openSettings(); return; }
+  if (!text) text = 'Décris cette image.';
+  const img = pendingImg; clearImg();
+  if (listening && rec) rec.stop();
   composer.value = ''; composer.style.height = 'auto';
   $('sendBtn').disabled = true;
-  history.push({ role: 'user', content: text });
+  remember(text);
+  history.push({ role: 'user', content: (img ? '📷 ' : '') + text });
   store.set('mi_history', history);
-  addMsg('user', text);
+  addMsg('user', text, '', img);
+
+  const msgs = history.slice(-20).map(m => ({ role: m.role, content: m.content }));
+  if (img) msgs[msgs.length - 1] = { role: 'user', content: [{ type: 'text', text }, { type: 'image_url', image_url: { url: img } }] };
 
   const typing = addMsg('bot', 'MANASSE IA écrit', 'typing');
   try {
@@ -271,8 +390,8 @@ async function send() {
       method: 'POST',
       headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + apiKey },
       body: JSON.stringify({
-        model,
-        messages: [{ role: 'system', content: systemPrompt() }, ...history.slice(-20)],
+        model: img ? VISION_MODEL : model,
+        messages: [{ role: 'system', content: systemPrompt() }, ...msgs],
         temperature: 0.7
       })
     });
@@ -289,19 +408,15 @@ async function send() {
     history.push({ role: 'assistant', content: reply });
     store.set('mi_history', history);
     addMsg('bot', reply);
+    if (!img) learn(text);
   } catch (e) {
     typing.remove();
     addMsg('bot', "Connexion impossible. Vérifie ta connexion internet et réessaie.", 'error');
     history.pop(); store.set('mi_history', history);
   } finally {
+    saveCurrent();
     $('sendBtn').disabled = false;
   }
-}
-
-function newChat() {
-  history = []; store.set('mi_history', history);
-  renderHistory();
-  closeMenu();
 }
 
 /* ---------- Menu ---------- */
@@ -342,9 +457,8 @@ function saveSettings() {
 }
 async function refreshModels() {
   $('setOk').textContent = 'Actualisation…'; $('setErr').textContent = '';
-  const before = apiKey; apiKey = $('keyField').value.trim() || apiKey;
+  apiKey = $('keyField').value.trim() || apiKey;
   await fetchModels();
-  apiKey = before === $('keyField').value.trim() ? apiKey : apiKey;
   $('modelField').innerHTML = modelList.map(m => `<option value="${esc(m.id)}">${esc(m.label)}</option>`).join('');
   $('modelField').value = model;
   $('setOk').textContent = 'Liste des modèles mise à jour.';
@@ -353,7 +467,7 @@ async function refreshModels() {
 function openMemory() {
   showModal(`
     <h3>🧠 Mémoire à long terme</h3>
-    <p class="hint">Ajoute une information que MANASSE IA doit toujours garder en tête dans toutes tes discussions (une préférence, un détail sur toi, une consigne).</p>
+    <p class="hint">Ajoute une information que MANASSE IA doit toujours garder en tête dans toutes tes discussions. Il retient aussi automatiquement ce que tu lui confies, et tu peux lui écrire « Rappelle-toi que… » directement dans le chat.</p>
     <input class="field" id="memField" placeholder="Ex. : Je m'appelle Manassé et j'habite à Kinshasa">
     <div class="actions"><button class="btn" onclick="addMemory()">＋ Ajouter</button></div>
     <div id="memList" style="margin-top:10px"></div>
@@ -361,7 +475,7 @@ function openMemory() {
   renderMemories();
 }
 function renderMemories() {
-  const box = $('memList'); if (!box) return;
+  updateModelLabel(); const box = $('memList'); if (!box) return;
   box.innerHTML = memories.length ? '' : '<p class="hint">Aucun souvenir enregistré pour le moment.</p>';
   memories.forEach((m, i) => {
     const r = document.createElement('div'); r.className = 'mem-item';
@@ -391,13 +505,13 @@ function openAbout() {
 
 function updateModelLabel() {
   const m = modelList.find(x => x.id === model);
-  $('model-label').textContent = m ? m.label : model;
+  $('model-label').textContent = (m ? m.label : model) + (memories.length ? ' · ' + memories.length + ' souvenir' + (memories.length > 1 ? 's' : '') : '');
 }
 
 /* ---------- Particules de flux ---------- */
 function spawnParticles() {
-  const colors = ['#00ffb2', '#1b6dff', '#00e0ff'];
-  for (let i = 0; i < 14; i++) {
+  const colors = ['#38d6ff', '#2f7bff', '#00e0ff', '#ff9a3c'];
+  for (let i = 0; i < 16; i++) {
     const p = document.createElement('div');
     p.className = 'particle';
     const size = 2 + Math.random() * 3;
@@ -412,11 +526,77 @@ function spawnParticles() {
   }
 }
 
+/* ---------- Bienvenue, mémoire totale, notifications ---------- */
+let tt; function toast(m) { let t = $('toast'); if (!t) { t = document.createElement('div'); t.id = 'toast'; t.className = 'toast'; document.body.appendChild(t); } t.textContent = m; requestAnimationFrame(() => t.classList.add('show')); clearTimeout(tt); tt = setTimeout(() => t.classList.remove('show'), 2600); }
+
+function greet() {
+  const g = $('greet'); if (!g) return;
+  const hr = new Date().getHours(), n = memories.length, k = convs.length;
+  let t = (hr < 5 || hr >= 18 ? 'Bonsoir' : 'Bonjour') + ' ! Je suis MANASSE IA, ton assistant personnel. ';
+  t += (n || k)
+    ? `Je me souviens de ${n} information${n > 1 ? 's' : ''} sur toi et de ${k} discussion${k > 1 ? 's' : ''} passée${k > 1 ? 's' : ''}. Que veux-tu reprendre ou découvrir aujourd'hui ?`
+    : "Je retiens tout ce que tu me confies pour mieux t'aider au fil du temps. Comment puis-je t'aider ?";
+  if (!apiKey) t += ' Pour commencer : Menu → Réglages, puis colle ta clé API Groq.';
+  g.textContent = ''; let i = 0;
+  const iv = setInterval(() => { if ($('greet') !== g) return clearInterval(iv); g.textContent = t.slice(0, ++i); if (i >= t.length) clearInterval(iv); }, 16);
+  const box = $('chips'); box.innerHTML = '';
+  [['Rappelle-toi que…', 'Rappelle-toi que ', 0], ['Que sais-tu de moi ?', 'Que sais-tu de moi ?', 1], ['Résume notre dernière discussion', 'Résume notre dernière discussion.', 1]].forEach(([l, v, go]) => {
+    const b = document.createElement('button'); b.className = 'chip'; b.textContent = l;
+    b.onclick = () => { composer.value = v; composer.dispatchEvent(new Event('input')); composer.focus(); if (go) send(); };
+    box.appendChild(b);
+  });
+}
+
+/* « Rappelle-toi que… » : mémorisation immédiate */
+function remember(text) {
+  const m = text.match(/^\s*(?:(?:s'il te plaît|stp)[, ]*)?(?:souviens[- ]toi|rappelle[- ]toi|retiens|n'oublie pas|mémorise)(?: bien)?(?:\s+que|\s*:)?\s+(.{3,})$/is);
+  if (!m) return;
+  const s = m[1].trim().slice(0, 300);
+  if (!memories.some(x => x.toLowerCase() === s.toLowerCase())) { memories.push(s); store.set('mi_memories', memories); updateModelLabel(); toast('Mémorisé : ' + s.slice(0, 40)); }
+}
+
+/* Apprentissage automatique : extrait les faits durables de chaque message */
+async function learn(text) {
+  if (!apiKey || text.length < 12) return;
+  try {
+    const r = await fetch('https://api.groq.com/openai/v1/chat/completions', {
+      method: 'POST', headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + apiKey },
+      body: JSON.stringify({ model, temperature: 0, max_tokens: 700, ...(/gpt-oss/.test(model) ? { reasoning_effort: 'low' } : {}),
+        messages: [{ role: 'system', content: "Extrais uniquement les faits durables et personnels que l'utilisateur révèle sur lui (nom, lieu, métier, projets, goûts, proches, objectifs, consignes). Réponds UNIQUEMENT par un tableau JSON de phrases courtes en français, ou []. Ignore ces faits déjà connus : " + JSON.stringify(memories.slice(-40)) }, { role: 'user', content: text }] })
+    });
+    if (!r.ok) return;
+    const j = await r.json();
+    const raw = (j.choices?.[0]?.message?.content || '').replace(/<think>[\s\S]*?<\/think>/g, '');
+    const m = raw.match(/\[[\s\S]*\]/); if (!m) return;
+    let added = 0;
+    JSON.parse(m[0]).forEach(s => {
+      if (typeof s !== 'string' || s.trim().length < 4) return;
+      s = s.trim().slice(0, 200);
+      if (!memories.some(x => x.toLowerCase() === s.toLowerCase())) { memories.push(s); added++; }
+    });
+    if (added) { memories = memories.slice(-100); store.set('mi_memories', memories); updateModelLabel(); toast('Mémorisé automatiquement'); }
+  } catch (e) { /* silencieux */ }
+}
+
+/* Extraits des discussions passées (les plus pertinentes d'abord) */
+function pastDigest() {
+  const last = (history.filter(m => m.role === 'user').slice(-1)[0] || {}).content || '';
+  const q = last.toLowerCase().split(/\W+/).filter(w => w.length > 3);
+  const list = convs.filter(c => c.id !== curId).map(c => {
+    const blob = c.messages.map(m => m.content).join(' ').toLowerCase();
+    return { c, s: q.reduce((a, w) => a + (blob.includes(w) ? 1 : 0), 0) };
+  }).sort((a, b) => b.s - a.s || b.c.ts - a.c.ts).slice(0, 6);
+  let out = '';
+  list.forEach(({ c }) => { out += `[${new Date(c.ts).toLocaleDateString('fr-FR')}] ${c.title}\n` + c.messages.slice(-6).map(m => (m.role === 'user' ? 'Lui : ' : 'Toi : ') + m.content.slice(0, 220)).join('\n') + '\n\n'; });
+  return out.slice(0, 3800);
+}
+
 /* ---------- Démarrage ---------- */
 window.onload = () => {
   spawnParticles();
   updateModelLabel();
-  renderHistory();
+  renderHistory();   // reprend automatiquement la discussion laissée en cours
+  if (history.length) toast('Content de te revoir : discussion reprise');
   fetchModels();
   if ('serviceWorker' in navigator && location.protocol.indexOf('http') === 0) {
     navigator.serviceWorker.register('sw.js').catch(() => {});
