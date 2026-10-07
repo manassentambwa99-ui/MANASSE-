@@ -14,15 +14,19 @@
 <meta name="theme-color" content="#030814">
 <style>
 *{box-sizing:border-box;margin:0;padding:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif}
-:root{padding-top:env(safe-area-inset-top,0);padding-bottom:env(safe-area-inset-bottom,0);--g:#38d6ff;--b:#2f7bff;--c:#00e0ff}
+:root{padding-top:env(safe-area-inset-top,0);padding-bottom:env(safe-area-inset-bottom,0);--g:#38d6ff;--b:#2f7bff;--c:#00e0ff;--bg-base:#030814}
+/* Thèmes ajoutés */
+body.theme-cyberpunk { --g:#00ff66; --b:#ff0055; --c:#00ffff; --bg-base:#05050a; }
+body.theme-neon { --g:#ff00eb; --b:#7000ff; --c:#00d8ff; --bg-base:#0a0314; }
+
 html,body{height:100%;width:100%;overflow:hidden}
-body{background:radial-gradient(circle at 18% 0%,rgba(56,214,255,.16),transparent 42%),radial-gradient(circle at 88% 10%,rgba(30,110,255,.28),transparent 50%),radial-gradient(circle at 50% 100%,rgba(255,130,40,.16),transparent 55%),#030814;color:#eaf4ff;display:flex;flex-direction:column;-webkit-tap-highlight-color:transparent;position:relative}
+body{background:radial-gradient(circle at 18% 0%,rgba(56,214,255,.16),transparent 42%),radial-gradient(circle at 88% 10%,rgba(30,110,255,.28),transparent 50%),radial-gradient(circle at 50% 100%,rgba(255,130,40,.16),transparent 55%),var(--bg-base);color:#eaf4ff;display:flex;flex-direction:column;-webkit-tap-highlight-color:transparent;position:relative}
 input,textarea{user-select:text;-webkit-user-select:text;font-family:inherit}
 .glass{background:linear-gradient(160deg,rgba(130,190,255,.09),rgba(20,40,100,.07));border:1px solid rgba(120,190,255,.18);box-shadow:inset 0 1px 0 rgba(210,232,255,.14),0 8px 26px rgba(0,0,0,.45),0 0 24px rgba(56,214,255,.06);backdrop-filter:blur(20px) saturate(170%);-webkit-backdrop-filter:blur(20px) saturate(170%)}
 .orb{position:fixed;border-radius:50%;filter:blur(50px);opacity:.5;pointer-events:none;z-index:0;animation:float 17s ease-in-out infinite alternate}
-.orb.a{width:260px;height:260px;left:-90px;top:4%;background:radial-gradient(circle at 30% 30%,#38d6ff,transparent 70%)}
-.orb.b{width:300px;height:300px;right:-110px;top:42%;background:radial-gradient(circle at 30% 30%,#2f7bff,transparent 70%);animation-delay:-6s}
-.orb.c{width:220px;height:220px;left:20%;bottom:-80px;background:radial-gradient(circle at 30% 30%,#00e0ff,transparent 70%);animation-delay:-10s}
+.orb.a{width:260px;height:260px;left:-90px;top:4%;background:radial-gradient(circle at 30% 30%,var(--g),transparent 70%)}
+.orb.b{width:300px;height:300px;right:-110px;top:42%;background:radial-gradient(circle at 30% 30%,var(--b),transparent 70%);animation-delay:-6s}
+.orb.c{width:220px;height:220px;left:20%;bottom:-80px;background:radial-gradient(circle at 30% 30%,var(--c),transparent 70%);animation-delay:-10s}
 @keyframes float{to{transform:translate(30px,-40px) scale(1.14)}}
 /* Grille holographique + scanlines */
 #grid{position:fixed;left:-50%;right:-50%;bottom:0;height:55%;z-index:0;pointer-events:none;opacity:.28;background-image:linear-gradient(rgba(56,214,255,.5) 1px,transparent 1px),linear-gradient(90deg,rgba(0,224,255,.5) 1px,transparent 1px);background-size:44px 44px;transform:perspective(420px) rotateX(62deg);transform-origin:bottom;animation:gridmove 4s linear infinite;-webkit-mask-image:linear-gradient(transparent,#000 70%);mask-image:linear-gradient(transparent,#000 70%)}
@@ -77,8 +81,8 @@ pre{background:#040d1e;border:1px solid rgba(56,214,255,.25);border-radius:12px;
 code{font-family:Consolas,Monaco,monospace;background:rgba(56,214,255,.1);padding:2px 5px;border-radius:4px;color:#a9e5ff}
 pre code{background:none;padding:0;color:inherit}
 .code-actions{display:flex;gap:8px;margin-top:8px;flex-wrap:wrap}
-.preview-btn,.copy-btn,.speak-btn{display:inline-flex;align-items:center;gap:6px;background:linear-gradient(135deg,rgba(56,214,255,.2),rgba(47,123,255,.3));border:1px solid rgba(56,214,255,.4);color:#fff;padding:6px 12px;border-radius:14px;font-size:12px;font-weight:700;cursor:pointer;transition:.2s}
-.preview-btn:active,.copy-btn:active,.speak-btn:active{transform:scale(.95);background:rgba(56,214,255,.4)}
+.preview-btn,.copy-btn,.speak-btn,.edit-canvas-btn{display:inline-flex;align-items:center;gap:6px;background:linear-gradient(135deg,rgba(56,214,255,.2),rgba(47,123,255,.3));border:1px solid rgba(56,214,255,.4);color:#fff;padding:6px 12px;border-radius:14px;font-size:12px;font-weight:700;cursor:pointer;transition:.2s}
+.preview-btn:active,.copy-btn:active,.speak-btn:active,.edit-canvas-btn:active{transform:scale(.95);background:rgba(56,214,255,.4)}
 .msg-toolbar{display:flex;gap:8px;margin-top:8px;border-top:1px solid rgba(255,255,255,.08);padding-top:6px;justify-content:flex-end}
 
 .welcome{text-align:center;margin:auto;padding:20px;color:#9cc4ff;font-size:13px}
@@ -181,6 +185,11 @@ select.field option{background:#050d1f;color:#fff}
 main::-webkit-scrollbar{width:4px}main::-webkit-scrollbar-thumb{background:linear-gradient(#38d6ff,#ff9a3c);border-radius:4px}
 .menu-item{transition:.2s}.menu-item:active,.menu-item:hover{background:linear-gradient(90deg,rgba(56,214,255,.18),transparent);padding-left:16px}
 @media (prefers-reduced-motion:reduce){.brand-name,.send-btn,.brand-sub::before{animation:none}}
+
+/* Style spécifique Canvas Editor */
+.canvas-container { display: flex; flex-direction: column; gap: 10px; height: 75vh; }
+.canvas-editor { width: 100%; height: 40%; background: #030a18; color: #38d6ff; border: 1px solid rgba(56,214,255,.3); border-radius: 12px; padding: 10px; font-family: monospace; font-size: 12px; resize: none; outline: none; }
+.canvas-iframe { width: 100%; height: 60%; background: #fff; border-radius: 12px; border: 1px solid rgba(120,190,255,.3); }
 </style>
 </head>
 <body>
@@ -201,7 +210,10 @@ main::-webkit-scrollbar{width:4px}main::-webkit-scrollbar-thumb{background:linea
       <div class="brand-sub" id="model-label">…</div>
     </div>
   </div>
-  <div class="icon-btn" onclick="newChat()" title="Nouvelle discussion"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg></div>
+  <div style="display:flex;gap:6px">
+    <div class="icon-btn" id="ttsToggleBtn" onclick="toggleAutoTTS()" title="Lecture vocale auto"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M11 5L6 9H2v6h4l5 4V5z"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/></svg></div>
+    <div class="icon-btn" onclick="newChat()" title="Nouvelle discussion"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg></div>
+  </div>
 </header>
 
 <main id="chat">
@@ -209,10 +221,10 @@ main::-webkit-scrollbar{width:4px}main::-webkit-scrollbar-thumb{background:linea
 </main>
 
 <div class="inputbar glass">
-  <div id="preview" class="glass"><img id="prevImg" alt=""><span>Photo prête à envoyer</span><button class="tool" onclick="clearImg()">✕</button></div>
+  <div id="preview" class="glass"><img id="prevImg" alt=""><span>Pièce jointe prête à envoyer</span><button class="tool" onclick="clearImg()">✕</button></div>
   <div class="inputrow">
-    <input type="file" id="fileIn" accept="image/*" hidden>
-    <button class="tool" onclick="$('fileIn').click()" title="Envoyer une photo"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg></button>
+    <input type="file" id="fileIn" accept="image/*,.txt,.js,.html,.css,.json,.md" hidden>
+    <button class="tool" onclick="$('fileIn').click()" title="Envoyer un fichier/photo"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg></button>
     <button class="tool" id="micBtn" onclick="toggleMic()" title="Saisie vocale"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="9" y="2" width="6" height="12" rx="3"/><path d="M19 10v2a7 7 0 0 1-14 0v-2M12 19v3"/></svg></button>
     <textarea id="composer" rows="1" placeholder="Écris un message…"></textarea>
     <button class="send-btn" id="sendBtn" onclick="send()"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M22 2 11 13M22 2l-7 20-4-9-9-4z"/></svg></button>
@@ -265,7 +277,10 @@ let memories = store.get('mi_memories', []);
 let convs = store.get('mi_convs', []);   
 let curId = store.get('mi_cur', null);   
 let pendingImg = null;                   
+let pendingDocText = null; // Fichiers documents textes ajoutés
 let codeSnippets = {}; // Pour stocker le code généré et permettre l'aperçu HTML direct
+let autoTTS = store.get('mi_autotts', false);
+let appTheme = store.get('mi_theme', 'default');
 
 function systemPrompt() {
   let p = `Tu es ${APP_NAME}, un assistant conversationnel puissant en français, chaleureux, ultra-compétent et utile. ` +
@@ -304,7 +319,7 @@ if (!model) model = (modelList[0] && modelList[0].id) || '';
 function formatResponse(text, msgId) {
   let html = esc(text);
   
-  // Remplacement des blocs de code avec bouton d'aperçu HTML dynamique
+  // Remplacement des blocs de code avec bouton d'aperçu HTML dynamique ET Éditeur Canvas
   html = html.replace(/```(html|xml|svg)?\n([\s\S]*?)```/gi, (match, lang, code) => {
     const snippetId = 'code_' + Math.random().toString(36).substr(2, 9);
     const unescapedCode = code.replace(/&amp;/g, '&').replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&quot;/g, '"').replace(/&#39;/g, "'");
@@ -312,7 +327,8 @@ function formatResponse(text, msgId) {
 
     return `<pre><code>${code}</code></pre>
       <div class="code-actions">
-        <button class="preview-btn" onclick="previewCode('${snippetId}')">👁️ Aperçu du Site / Code HTML</button>
+        <button class="preview-btn" onclick="previewCode('${snippetId}')">👁️ Aperçu direct</button>
+        <button class="edit-canvas-btn" onclick="openCanvasEditor('${snippetId}')">🚀 Éditeur Canvas</button>
         <button class="copy-btn" onclick="copyText(\`${esc(unescapedCode)}\`)">📋 Copier</button>
       </div>`;
   });
@@ -349,6 +365,8 @@ function addMsg(role, text, cls, img) {
       tb.innerHTML = `<button class="speak-btn" onclick="speakMsg('${msgId}')">🔊 Écouter</button>
                       <button class="copy-btn" onclick="copyText(\`${esc(text)}\`)">📋 Copier</button>`;
       el.appendChild(tb);
+
+      if (autoTTS) speakMsg(msgId);
     }
   } else { 
     el.appendChild(document.createTextNode(text)); 
@@ -372,7 +390,7 @@ function renderHistory() {
   history.forEach(m => addMsg(m.role, m.content));
 }
 
-/* ---------- Fonctionnalité : Aperçu Web / HTML interactif ---------- */
+/* ---------- Fonctionnalité : Aperçu Web / HTML interactif & Éditeur Canvas ---------- */
 function previewCode(snippetId) {
   const code = codeSnippets[snippetId];
   if (!code) return;
@@ -396,11 +414,44 @@ function previewCode(snippetId) {
   }, 100);
 }
 
-/* ---------- Synthèse vocale & Copie ---------- */
+// Fonction Éditeur Canvas Interactive ajoutée
+function openCanvasEditor(snippetId) {
+  const code = codeSnippets[snippetId] || '<h1>Hello World</h1>';
+  showModal(`
+    <h3>🚀 Canvas - Éditeur Interactif</h3>
+    <p class="hint">Modifie le code ci-dessous en temps réel pour voir les modifications instantanées dans le rendu.</p>
+    <div class="canvas-container">
+      <textarea id="canvasTextarea" class="canvas-editor">${esc(code)}</textarea>
+      <iframe id="canvasIframe" class="canvas-iframe"></iframe>
+    </div>
+    <div class="actions">
+      <button class="btn" onclick="updateCanvasIframe()">🔄 Actualiser le rendu</button>
+      <button class="btn alt" onclick="closeModal()">Fermer Canvas</button>
+    </div>
+  `);
+
+  setTimeout(() => {
+    updateCanvasIframe();
+    $('canvasTextarea').addEventListener('input', updateCanvasIframe);
+  }, 100);
+}
+
+function updateCanvasIframe() {
+  const code = $('canvasTextarea').value;
+  const frame = $('canvasIframe');
+  if (frame) {
+    const doc = frame.contentDocument || frame.contentWindow.document;
+    doc.open();
+    doc.write(code);
+    doc.close();
+  }
+}
+
+/* ---------- Synthèse vocale & Copie & Gestion Thème ---------- */
 function speakMsg(msgId) {
   const el = $(msgId);
   if (!el) return;
-  const text = el.innerText.replace(/🔊 Écouter|📋 Copier|👁️ Aperçu du Site /g, '');
+  const text = el.innerText.replace(/🔊 Écouter|📋 Copier|👁️ Aperçu direct|🚀 Éditeur Canvas|📋 Copier le code/g, '');
   if ('speechSynthesis' in window) {
     window.speechSynthesis.cancel();
     const utt = new SpeechSynthesisUtterance(text);
@@ -410,6 +461,13 @@ function speakMsg(msgId) {
   } else {
     toast('Synthèse vocale indisponible.');
   }
+}
+
+function toggleAutoTTS() {
+  autoTTS = !autoTTS;
+  store.set('mi_autotts', autoTTS);
+  toast(autoTTS ? 'Lecture vocale auto : ACTIVÉE' : 'Lecture vocale auto : DÉSACTIVÉE');
+  $('ttsToggleBtn').style.opacity = autoTTS ? '1' : '0.5';
 }
 
 function copyText(txt) {
@@ -435,7 +493,7 @@ function saveCurrent() {
   if (!history.length) return;
   if (!curId) { curId = 'c' + Date.now(); store.set('mi_cur', curId); }
   const first = (history.find(m => m.role === 'user') || {}).content || 'Discussion';
-  const conv = { id: curId, title: first.replace(/^📷 /, '').slice(0, 42), ts: Date.now(), messages: history.slice(-60) };
+  const conv = { id: curId, title: first.replace(/^📷 /, '').replace(/^📄 /, '').slice(0, 42), ts: Date.now(), messages: history.slice(-60) };
   const i = convs.findIndex(c => c.id === curId);
   if (i >= 0) convs[i] = conv; else convs.unshift(conv);
   convs = convs.slice(0, 50);
@@ -469,24 +527,37 @@ function openConv(id) {
   renderHistory(); closeModal();
 }
 
-/* ---------- Photos ---------- */
+/* ---------- Import Fichiers & Photos ---------- */
 $('fileIn').addEventListener('change', e => {
   const f = e.target.files[0]; if (!f) return;
-  const rd = new FileReader();
-  rd.onload = () => {
-    const im = new Image();
-    im.onload = () => {
-      const s = Math.min(1, 1024 / Math.max(im.width, im.height));
-      const cv = document.createElement('canvas'); cv.width = im.width * s; cv.height = im.height * s;
-      cv.getContext('2d').drawImage(im, 0, 0, cv.width, cv.height);
-      pendingImg = cv.toDataURL('image/jpeg', 0.75);
-      $('prevImg').src = pendingImg; $('preview').style.display = 'flex';
+  
+  if (f.type.startsWith('image/')) {
+    const rd = new FileReader();
+    rd.onload = () => {
+      const im = new Image();
+      im.onload = () => {
+        const s = Math.min(1, 1024 / Math.max(im.width, im.height));
+        const cv = document.createElement('canvas'); cv.width = im.width * s; cv.height = im.height * s;
+        cv.getContext('2d').drawImage(im, 0, 0, cv.width, cv.height);
+        pendingImg = cv.toDataURL('image/jpeg', 0.75);
+        $('prevImg').src = pendingImg; $('preview').style.display = 'flex';
+      };
+      im.src = rd.result;
     };
-    im.src = rd.result;
-  };
-  rd.readAsDataURL(f); e.target.value = '';
+    rd.readAsDataURL(f);
+  } else {
+    // Fichier texte/code
+    const rd = new FileReader();
+    rd.onload = () => {
+      pendingDocText = `[Contenu du fichier "${f.name}"]:\n` + rd.result;
+      toast(`Fichier "${f.name}" prêt à l'envoi`);
+      $('preview').style.display = 'flex';$('prevImg').src = 'icon.svg';
+    };
+    rd.readAsText(f);
+  }
+  e.target.value = '';
 });
-function clearImg() { pendingImg = null; $('preview').style.display = 'none'; }
+function clearImg() { pendingImg = null; pendingDocText = null; $('preview').style.display = 'none'; }
 
 /* ---------- Saisie vocale ---------- */
 let rec = null, listening = false;
@@ -512,9 +583,14 @@ composer.addEventListener('keydown', e => { if (e.key === 'Enter' && !e.shiftKey
 
 async function send() {
   let text = composer.value.trim();
-  if (!text && !pendingImg) return;
+  if (!text && !pendingImg && !pendingDocText) return;
   if (!apiKey) { openSettings(); return; }
-  if (!text) text = 'Décris cette image.';
+  if (!text) text = pendingImg ? 'Décris cette image.' : 'Analyse ce document.';
+  
+  if (pendingDocText) {
+    text = text + "\n\n" + pendingDocText;
+  }
+
   const img = pendingImg; clearImg();
   if (listening && rec) rec.stop();
   composer.value = ''; composer.style.height = 'auto';
@@ -542,7 +618,7 @@ async function send() {
     typing.remove();
     if (!r.ok) {
       const msg = (data.error && data.error.message) || ('Erreur ' + r.status);
-      addMsg('bot', "Je n'ai pas pou répondre : " + msg + (r.status === 401 ? ' (vérifie ta clé API dans les Réglages)' : ''), 'error');
+      addMsg('bot', "Je n'ai pas pu répondre : " + msg + (r.status === 401 ? ' (vérifie ta clé API dans les Réglages)' : ''), 'error');
       history.pop(); store.set('mi_history', history);
       if (r.status === 404) fetchModels();
       return;
@@ -581,6 +657,14 @@ function openSettings() {
     <input class="field" id="keyField" type="password" placeholder="gsk_..." autocomplete="off">
     <div class="field-label">Modèle</div>
     <select class="field" id="modelField">${modelList.map(m => `<option value="${esc(m.id)}">${esc(m.label)}</option>`).join('')}</select>
+    
+    <div class="field-label">Thème Interface</div>
+    <select class="field" id="themeField">
+      <option value="default" ${appTheme === 'default' ? 'selected' : ''}>Par défaut (Bleu Hologramme)</option>
+      <option value="cyberpunk" ${appTheme === 'cyberpunk' ? 'selected' : ''}>Hacker Cyberpunk (Vert / Rose)</option>
+      <option value="neon" ${appTheme === 'neon' ? 'selected' : ''}>Néon Violet (Futuriste)</option>
+    </select>
+
     <div class="err" id="setErr"></div>
     <div class="ok" id="setOk"></div>
     <div class="actions">
@@ -592,15 +676,28 @@ function openSettings() {
   $('keyField').value = apiKey;
   $('modelField').value = model;
 }
+
+function applyTheme(themeName) {
+  document.body.classList.remove('theme-cyberpunk', 'theme-neon');
+  if (themeName === 'cyberpunk') document.body.classList.add('theme-cyberpunk');
+  if (themeName === 'neon') document.body.classList.add('theme-neon');
+}
+
 function saveSettings() {
   const k = $('keyField').value.trim();
   if (!k) { $('setErr').textContent = 'Colle ta clé API pour continuer.'; return; }
   apiKey = k; model = $('modelField').value;
+  appTheme = $('themeField').value;
+  
   store.set('mi_key', apiKey); store.set('mi_model', model);
+  store.set('mi_theme', appTheme);
+  
+  applyTheme(appTheme);
   updateModelLabel();
   fetchModels();
   closeModal();
 }
+
 async function refreshModels() {
   $('setOk').textContent = 'Actualisation…';$('setErr').textContent = '';
   apiKey = $('keyField').value.trim() || apiKey;
@@ -759,8 +856,13 @@ function openApp(key) {
   setTimeout(() => { if (!left && !document.hidden) location.href = a.web; }, 1600);
 }
 
+/* ---------- Détection Réseau En Ligne / Hors Ligne ---------- */
+window.addEventListener('online', () => toast('Connexion rétablie !'));
+window.addEventListener('offline', () => toast('Mode Hors-Ligne détecté'));
+
 /* ---------- Démarrage ---------- */
 window.onload = () => {
+  applyTheme(appTheme);
   spawnParticles();
   updateModelLabel();
   renderHistory();   
