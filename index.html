@@ -15,8 +15,8 @@
 <style>
 *{box-sizing:border-box;margin:0;padding:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif}
 :root{padding-top:env(safe-area-inset-top,0);padding-bottom:env(safe-area-inset-bottom,0);--g:#38d6ff;--b:#2f7bff;--c:#00e0ff}
-html,body{height:100%}
-body{background:radial-gradient(circle at 18% 0%,rgba(56,214,255,.16),transparent 42%),radial-gradient(circle at 88% 10%,rgba(30,110,255,.28),transparent 50%),radial-gradient(circle at 50% 100%,rgba(255,130,40,.16),transparent 55%),#030814;color:#eaf4ff;display:flex;flex-direction:column;overflow:hidden;-webkit-tap-highlight-color:transparent;position:relative}
+html,body{height:100%;width:100%;overflow:hidden}
+body{background:radial-gradient(circle at 18% 0%,rgba(56,214,255,.16),transparent 42%),radial-gradient(circle at 88% 10%,rgba(30,110,255,.28),transparent 50%),radial-gradient(circle at 50% 100%,rgba(255,130,40,.16),transparent 55%),#030814;color:#eaf4ff;display:flex;flex-direction:column;-webkit-tap-highlight-color:transparent;position:relative}
 input,textarea{user-select:text;-webkit-user-select:text;font-family:inherit}
 .glass{background:linear-gradient(160deg,rgba(130,190,255,.09),rgba(20,40,100,.07));border:1px solid rgba(120,190,255,.18);box-shadow:inset 0 1px 0 rgba(210,232,255,.14),0 8px 26px rgba(0,0,0,.45),0 0 24px rgba(56,214,255,.06);backdrop-filter:blur(20px) saturate(170%);-webkit-backdrop-filter:blur(20px) saturate(170%)}
 .orb{position:fixed;border-radius:50%;filter:blur(50px);opacity:.5;pointer-events:none;z-index:0;animation:float 17s ease-in-out infinite alternate}
@@ -42,7 +42,7 @@ input,textarea{user-select:text;-webkit-user-select:text;font-family:inherit}
 .particle{position:fixed;bottom:-10px;border-radius:50%;z-index:0;pointer-events:none;animation:rise linear infinite}
 @keyframes rise{to{transform:translateY(-115vh) translateX(var(--dx,0px));opacity:0}}
 @media (prefers-reduced-motion:reduce){.orb,#flux::before,#flux::after,.particle,#grid,#scan::after,.waves svg,.ring{animation:none!important}}
-header{position:relative;z-index:5;display:flex;align-items:center;justify-content:space-between;gap:10px;padding:calc(12px + env(safe-area-inset-top,0)) 14px 12px;border-bottom:1px solid rgba(120,190,255,.14);overflow:hidden}
+header{position:relative;z-index:5;display:flex;align-items:center;justify-content:space-between;gap:10px;padding:calc(12px + env(safe-area-inset-top,0)) 14px 12px;border-bottom:1px solid rgba(120,190,255,.14);overflow:hidden;flex-shrink:0}
 header::after{content:'';position:absolute;left:0;right:0;bottom:-1px;height:2px;background:linear-gradient(90deg,#38d6ff,#2f7bff,#ff9a3c,#2f7bff,#38d6ff);background-size:300% 100%;animation:flowline 5s linear infinite}
 @keyframes flowline{to{background-position:300% 0}}
 .icon-btn{width:38px;height:38px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:18px;cursor:pointer;background:rgba(56,214,255,.08);border:1px solid rgba(120,190,255,.22);flex-shrink:0;transition:box-shadow .2s}
@@ -56,8 +56,10 @@ header::after{content:'';position:absolute;left:0;right:0;bottom:-1px;height:2px
 @keyframes pulse{50%{box-shadow:0 0 26px rgba(56,214,255,1)}}
 .brand-name{font-weight:900;font-size:16px;letter-spacing:1px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;background:linear-gradient(90deg,#eaf4ff,#a9d8ff,#7fc4ff,#eaf4ff);background-size:250% 100%;-webkit-background-clip:text;background-clip:text;color:transparent;animation:flowline 6s linear infinite;text-shadow:0 0 18px rgba(56,214,255,.3)}
 .brand-sub{font-size:10px;color:#8cc8ff}
-main{position:relative;z-index:2;flex:1;overflow-y:auto;padding:16px 14px 8px;display:flex;flex-direction:column;gap:12px}
-.msg{max-width:86%;padding:11px 14px;border-radius:16px;font-size:14px;line-height:1.5;white-space:pre-wrap;word-break:break-word;animation:pop .35s ease}
+
+/* CORRECTION DE DÉFILEMENT DE LA PAGE DE CHAT */
+main{position:relative;z-index:2;flex:1;overflow-y:auto;overflow-x:hidden;padding:16px 14px 40px;display:flex;flex-direction:column;gap:14px;-webkit-overflow-scrolling:touch;scroll-behavior:smooth}
+.msg{max-width:88%;padding:12px 15px;border-radius:16px;font-size:14.5px;line-height:1.52;white-space:pre-wrap;word-break:break-word;animation:pop .35s ease}
 @keyframes pop{from{opacity:0;transform:translateY(10px) scale(.97)}}
 .msg a{color:#38d6ff;text-decoration:underline;font-weight:bold}
 .msg.user{align-self:flex-end;background:linear-gradient(135deg,rgba(47,123,255,.5),rgba(56,214,255,.28));border:1px solid rgba(150,255,225,.3);border-bottom-right-radius:4px;box-shadow:0 0 18px rgba(47,123,255,.25)}
@@ -68,7 +70,17 @@ main{position:relative;z-index:2;flex:1;overflow-y:auto;padding:16px 14px 8px;di
 .msg.bot.typing::after{content:'';display:inline-block;width:6px;height:6px;margin-left:6px;border-radius:50%;background:#38d6ff;box-shadow:0 0 8px #38d6ff;animation:blink 1s ease-in-out infinite;position:static}
 @keyframes blink{0%,100%{opacity:.2}50%{opacity:1}}
 .msg.error{border-color:rgba(255,110,110,.4);color:#ffc7c7}
-.msg img{display:block;max-width:100%;max-height:220px;border-radius:12px;margin-bottom:8px;border:1px solid rgba(120,190,255,.3)}
+.msg img{display:block;max-width:100%;max-height:240px;border-radius:12px;margin-bottom:8px;border:1px solid rgba(120,190,255,.3)}
+
+/* BLOCS DE CODE ET APERÇU INTERACTIF WEBPAGE */
+pre{background:#040d1e;border:1px solid rgba(56,214,255,.25);border-radius:12px;padding:12px;margin:10px 0;overflow-x:auto;font-family:Consolas,Monaco,monospace;font-size:12.5px;color:#80d4ff;position:relative}
+code{font-family:Consolas,Monaco,monospace;background:rgba(56,214,255,.1);padding:2px 5px;border-radius:4px;color:#a9e5ff}
+pre code{background:none;padding:0;color:inherit}
+.code-actions{display:flex;gap:8px;margin-top:8px;flex-wrap:wrap}
+.preview-btn,.copy-btn,.speak-btn{display:inline-flex;align-items:center;gap:6px;background:linear-gradient(135deg,rgba(56,214,255,.2),rgba(47,123,255,.3));border:1px solid rgba(56,214,255,.4);color:#fff;padding:6px 12px;border-radius:14px;font-size:12px;font-weight:700;cursor:pointer;transition:.2s}
+.preview-btn:active,.copy-btn:active,.speak-btn:active{transform:scale(.95);background:rgba(56,214,255,.4)}
+.msg-toolbar{display:flex;gap:8px;margin-top:8px;border-top:1px solid rgba(255,255,255,.08);padding-top:6px;justify-content:flex-end}
+
 .welcome{text-align:center;margin:auto;padding:20px;color:#9cc4ff;font-size:13px}
 .welcome b{display:block;font-size:20px;color:#eaf4ff;margin-bottom:6px;letter-spacing:2px}
 .holo{width:96px;height:96px;margin:0 auto 14px;position:relative}
@@ -76,7 +88,8 @@ main{position:relative;z-index:2;flex:1;overflow-y:auto;padding:16px 14px 8px;di
 .holo i:nth-child(2){inset:12px;border-top-color:var(--c);border-right-color:transparent;border-bottom-color:var(--g);animation-duration:3s;animation-direction:reverse}
 .holo i:nth-child(3){inset:26px;border-color:var(--b) transparent var(--c) transparent;animation-duration:2s}
 .holo::after{content:'';position:absolute;inset:38px;border-radius:50%;background:radial-gradient(circle,#fff,var(--g) 40%,transparent 70%);animation:pulse 2s ease-in-out infinite}
-.inputbar{position:relative;z-index:5;padding:10px 12px calc(10px + env(safe-area-inset-bottom,0));border-top:1px solid rgba(120,190,255,.14);overflow:hidden}
+
+.inputbar{position:relative;z-index:5;padding:10px 12px calc(10px + env(safe-area-inset-bottom,0));border-top:1px solid rgba(120,190,255,.14);overflow:hidden;flex-shrink:0}
 .inputbar::before{content:'';position:absolute;left:0;right:0;top:-1px;height:2px;background:linear-gradient(90deg,#00e0ff,#38d6ff,#2f7bff,#00e0ff);background-size:300% 100%;animation:flowline 5s linear infinite reverse}
 .inputrow{display:flex;align-items:flex-end;gap:6px;border-radius:22px;padding:6px 6px 6px 8px;box-shadow:0 0 22px rgba(56,214,255,.12)}
 .tool{width:36px;height:36px;border-radius:50%;border:1px solid rgba(120,190,255,.25);background:rgba(56,214,255,.08);color:#eaf4ff;font-size:16px;cursor:pointer;flex-shrink:0}
@@ -213,6 +226,7 @@ main::-webkit-scrollbar{width:4px}main::-webkit-scrollbar-thumb{background:linea
   <div class="menu-item" onclick="newChat()"><span class="ic"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg></span> Nouvelle discussion</div>
   <div class="menu-item" onclick="openHistory()"><span class="ic"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 12a9 9 0 1 0 3-6.7L3 8M3 3v5h5M12 7v5l3 2"/></svg></span> Historique</div>
   <div class="menu-item" onclick="openMemory()"><span class="ic"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="4" width="16" height="16" rx="2"/><rect x="9" y="9" width="6" height="6"/><path d="M9 1v3M15 1v3M9 20v3M15 20v3M20 9h3M20 14h3M1 9h3M1 14h3"/></svg></span> Mémoire à long terme</div>
+  <div class="menu-item" onclick="exportChat()"><span class="ic"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg></span> Exporter la discussion</div>
   <div class="menu-item" onclick="openSettings()"><span class="ic"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 21v-7M4 10V3M12 21v-9M12 8V3M20 21v-5M20 12V3M1 14h6M9 8h6M17 16h6"/></svg></span> Réglages</div>
   <div class="menu-sep"></div>
   <div class="menu-item" onclick="if(confirm('Effacer cette discussion ?'))deleteChat()"><span class="ic"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 6h18M8 6V4h8v2M19 6l-1 14H6L5 6M10 11v6M14 11v6"/></svg></span> Effacer la discussion</div>
@@ -234,11 +248,8 @@ const store = {
 
 const CREATOR = 'Manassé Ntambwa';
 const APP_NAME = 'MANASSE IA';
-const VISION_MODEL = 'meta-llama/llama-4-scout-17b-16e-instruct'; // utilisé uniquement quand une photo est jointe
+const VISION_MODEL = 'meta-llama/llama-4-scout-17b-16e-instruct'; 
 
-/* La clé API n'est jamais écrite dans ce fichier : elle est saisie une
-   seule fois dans Réglages et reste uniquement dans le stockage local de
-   cet appareil (localStorage), jamais envoyée ailleurs qu'à Groq. */
 const FALLBACK_MODELS = [
   { id: 'openai/gpt-oss-120b', label: 'GPT OSS 120B' },
   { id: 'openai/gpt-oss-20b', label: 'GPT OSS 20B' },
@@ -251,14 +262,16 @@ let model = store.get('mi_model', '');
 let modelList = store.get('mi_model_list', FALLBACK_MODELS);
 let history = store.get('mi_history', []);
 let memories = store.get('mi_memories', []);
-let convs = store.get('mi_convs', []);   // historique des discussions
-let curId = store.get('mi_cur', null);   // discussion en cours
-let pendingImg = null;                   // photo en attente d'envoi
+let convs = store.get('mi_convs', []);   
+let curId = store.get('mi_cur', null);   
+let pendingImg = null;                   
+let codeSnippets = {}; // Pour stocker le code généré et permettre l'aperçu HTML direct
 
 function systemPrompt() {
-  let p = `Tu es ${APP_NAME}, un assistant conversationnel en français, chaleureux, clair et utile. ` +
+  let p = `Tu es ${APP_NAME}, un assistant conversationnel puissant en français, chaleureux, ultra-compétent et utile. ` +
     `Tu as été créé par ${CREATOR}. Si on te demande qui t'a créé, qui t'a développé, qui est ton créateur/fondateur, ou toute question allant dans ce sens, réponds que tu as été créé par ${CREATOR}, sans mentionner d'autre entreprise ou laboratoire comme créateur. ` +
     `Réponds toujours en français, sauf si la personne écrit clairement dans une autre langue et demande explicitement une réponse dans cette langue.` +
+    `\n\nQuand tu rédiges du code web (HTML, CSS, JS), encapsule-le proprement dans des blocs de code markdown (ex: \`\`\`html ... \`\`\`). L'utilisateur pourra prévisualiser directement tes sites.` +
     `\n\nTu peux ouvrir des applications sur le téléphone de l'utilisateur. Quand il te demande d'ouvrir ou de lancer WhatsApp, Spotify, MovieBox ou TikTok, réponds par une courte phrase de confirmation, puis ajoute à la toute fin, sur sa propre ligne, exactement une balise : [OUVRIR:whatsapp], [OUVRIR:spotify], [OUVRIR:moviebox] ou [OUVRIR:tiktok]. N'écris jamais de lien. Pour toute autre demande, n'écris jamais de balise.`;
   if (memories.length) p += `\n\nSouvenirs à long terme que l'utilisateur t'a demandé de retenir (utilise-les naturellement si pertinent) :\n- ` + memories.join('\n- ');
   p += `\n\nDate et heure actuelles : ${new Date().toLocaleString('fr-FR')}. Tu possèdes une vraie mémoire : tu retiens tout ce que l'utilisateur te confie et tu te réfères naturellement à ses informations personnelles et à vos discussions passées ci-dessous (ne dis jamais que tu ne peux pas te souvenir). Quand il te demande de retenir quelque chose, confirme brièvement.`;
@@ -283,21 +296,75 @@ async function fetchModels() {
       }
       updateModelLabel();
     }
-  } catch (e) { /* pas de connexion : on garde la liste connue */ }
+  } catch (e) { }
 }
 if (!model) model = (modelList[0] && modelList[0].id) || '';
 
-/* ---------- Rendu des messages ---------- */
+/* ---------- Formateur de messages (Markdown + Code HTML + Actions) ---------- */
+function formatResponse(text, msgId) {
+  let html = esc(text);
+  
+  // Remplacement des blocs de code avec bouton d'aperçu HTML dynamique
+  html = html.replace(/```(html|xml|svg)?\n([\s\S]*?)```/gi, (match, lang, code) => {
+    const snippetId = 'code_' + Math.random().toString(36).substr(2, 9);
+    const unescapedCode = code.replace(/&amp;/g, '&').replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&quot;/g, '"').replace(/&#39;/g, "'");
+    codeSnippets[snippetId] = unescapedCode;
+
+    return `<pre><code>${code}</code></pre>
+      <div class="code-actions">
+        <button class="preview-btn" onclick="previewCode('${snippetId}')">👁️ Aperçu du Site / Code HTML</button>
+        <button class="copy-btn" onclick="copyText(\`${esc(unescapedCode)}\`)">📋 Copier</button>
+      </div>`;
+  });
+
+  // Autres blocs de code non HTML
+  html = html.replace(/```(\w+)?\n([\s\S]*?)```/g, (match, lang, code) => {
+    const unescapedCode = code.replace(/&amp;/g, '&').replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&quot;/g, '"').replace(/&#39;/g, "'");
+    return `<pre><code>${code}</code></pre><div class="code-actions"><button class="copy-btn" onclick="copyText(\`${esc(unescapedCode)}\`)">📋 Copier le code</button></div>`;
+  });
+
+  // Code en ligne
+  html = html.replace(/`([^`]+)`/g, '<code>$1</code>');
+  // Gras
+  html = html.replace(/\*\*([^*]+)\*\*/g, '<b>$1</b>');
+
+  return html;
+}
+
+/* ---------- Rendu des messages avec défilement fluide ---------- */
 function addMsg(role, text, cls, img) {
   const w = $('welcome'); if (w) w.style.display = 'none';
   const el = document.createElement('div');
+  const msgId = 'm_' + Date.now() + '_' + Math.random().toString(36).substr(2, 5);
+  el.id = msgId;
   el.className = 'msg ' + (role === 'user' ? 'user' : 'bot') + (cls ? ' ' + cls : '');
+  
   if (img) { const i = document.createElement('img'); i.src = img; el.appendChild(i); }
-  if (role === 'bot') { el.innerHTML = text; } else { el.appendChild(document.createTextNode(text)); }
-  $('chat').appendChild(el);
-  $('chat').scrollTop = $('chat').scrollHeight;
+  
+  if (role === 'bot') { 
+    el.innerHTML = formatResponse(text, msgId);
+    if (!cls || !cls.includes('typing')) {
+      const tb = document.createElement('div');
+      tb.className = 'msg-toolbar';
+      tb.innerHTML = `<button class="speak-btn" onclick="speakMsg('${msgId}')">🔊 Écouter</button>
+                      <button class="copy-btn" onclick="copyText(\`${esc(text)}\`)">📋 Copier</button>`;
+      el.appendChild(tb);
+    }
+  } else { 
+    el.appendChild(document.createTextNode(text)); 
+  }
+
+  const chat = $('chat');
+  chat.appendChild(el);
+  
+  // DÉFILEMENT AUTOMATIQUE ASSURÉ VERS LE BAS
+  setTimeout(() => {
+    chat.scrollTop = chat.scrollHeight;
+  }, 50);
+
   return el;
 }
+
 const WELCOME = '<div class="welcome" id="welcome"><div class="holo"><i></i><i></i><i></i><i></i><i></i><u></u><em>Ai</em></div><b>MANASSE IA</b><span class="stat">● SYSTÈME EN LIGNE</span><div class="greet" id="greet"></div><div class="chips" id="chips"></div></div>';
 function renderHistory() {
   $('chat').innerHTML = '';
@@ -305,7 +372,65 @@ function renderHistory() {
   history.forEach(m => addMsg(m.role, m.content));
 }
 
-/* ---------- Historique des discussions (sauvegarde auto) ---------- */
+/* ---------- Fonctionnalité : Aperçu Web / HTML interactif ---------- */
+function previewCode(snippetId) {
+  const code = codeSnippets[snippetId];
+  if (!code) return;
+
+  showModal(`
+    <h3 style="margin-bottom:10px">🌐 Aperçu de la création HTML</h3>
+    <iframe id="previewFrame" style="width:100%;height:70vh;border:1px solid rgba(120,190,255,.3);border-radius:14px;background:#fff"></iframe>
+    <div class="actions" style="margin-top:10px">
+      <button class="btn alt" onclick="closeModal()">Fermer l'aperçu</button>
+    </div>
+  `);
+
+  setTimeout(() => {
+    const frame = $('previewFrame');
+    if (frame) {
+      const doc = frame.contentDocument || frame.contentWindow.document;
+      doc.open();
+      doc.write(code);
+      doc.close();
+    }
+  }, 100);
+}
+
+/* ---------- Synthèse vocale & Copie ---------- */
+function speakMsg(msgId) {
+  const el = $(msgId);
+  if (!el) return;
+  const text = el.innerText.replace(/🔊 Écouter|📋 Copier|👁️ Aperçu du Site /g, '');
+  if ('speechSynthesis' in window) {
+    window.speechSynthesis.cancel();
+    const utt = new SpeechSynthesisUtterance(text);
+    utt.lang = 'fr-FR';
+    window.speechSynthesis.speak(utt);
+    toast('Lecture vocale en cours…');
+  } else {
+    toast('Synthèse vocale indisponible.');
+  }
+}
+
+function copyText(txt) {
+  navigator.clipboard.writeText(txt).then(() => {
+    toast('Copié dans le presse-papier !');
+  }).catch(() => {
+    toast('Erreur de copie.');
+  });
+}
+
+function exportChat() {
+  if (!history.length) { toast('Aucune discussion à exporter.'); return; }
+  const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(history, null, 2));
+  const dlAnchorElem = document.createElement('a');
+  dlAnchorElem.setAttribute("href", dataStr);
+  dlAnchorElem.setAttribute("download", `MANASSE_IA_Chat_${Date.now()}.json`);
+  dlAnchorElem.click();
+  toast('Discussion exportée !');
+}
+
+/* ---------- Historique des discussions ---------- */
 function saveCurrent() {
   if (!history.length) return;
   if (!curId) { curId = 'c' + Date.now(); store.set('mi_cur', curId); }
@@ -417,7 +542,7 @@ async function send() {
     typing.remove();
     if (!r.ok) {
       const msg = (data.error && data.error.message) || ('Erreur ' + r.status);
-      addMsg('bot', "Je n'ai pas pu répondre : " + msg + (r.status === 401 ? ' (vérifie ta clé API dans les Réglages)' : ''), 'error');
+      addMsg('bot', "Je n'ai pas pou répondre : " + msg + (r.status === 401 ? ' (vérifie ta clé API dans les Réglages)' : ''), 'error');
       history.pop(); store.set('mi_history', history);
       if (r.status === 404) fetchModels();
       return;
@@ -441,12 +566,12 @@ async function send() {
 }
 
 /* ---------- Menu ---------- */
-function openMenu() { $('menu').classList.add('open'); $('overlay').classList.add('open'); }
-function closeMenu() { $('menu').classList.remove('open'); $('overlay').classList.remove('open'); }
+function openMenu() { $('menu').classList.add('open');$('overlay').classList.add('open'); }
+function closeMenu() { $('menu').classList.remove('open');$('overlay').classList.remove('open'); }
 
 /* ---------- Fenêtres modales ---------- */
 function showModal(html) { $('modal-body').innerHTML = html; $('modal').style.display = 'flex'; closeMenu(); }
-function closeModal() { $('modal-body').innerHTML = ''; $('modal').style.display = 'none'; }
+function closeModal() { $('modal-body').innerHTML = '';$('modal').style.display = 'none'; }
 
 function openSettings() {
   showModal(`
@@ -477,7 +602,7 @@ function saveSettings() {
   closeModal();
 }
 async function refreshModels() {
-  $('setOk').textContent = 'Actualisation…'; $('setErr').textContent = '';
+  $('setOk').textContent = 'Actualisation…';$('setErr').textContent = '';
   apiKey = $('keyField').value.trim() || apiKey;
   await fetchModels();
   $('modelField').innerHTML = modelList.map(m => `<option value="${esc(m.id)}">${esc(m.label)}</option>`).join('');
@@ -516,7 +641,7 @@ function openAbout() {
   showModal(`
     <h3>ℹ️ À propos de MANASSE IA</h3>
     <p class="hint" style="margin-top:10px">
-      <b>MANASSE IA</b> est un assistant conversationnel.<br><br>
+      <b>MANASSE IA</b> est un assistant conversationnel de pointe.<br><br>
       <b>Créé par ${esc(CREATOR)}</b><br><br>
       Les réponses sont générées par un modèle de langage : vérifie toujours les informations importantes avant de t'y fier.
     </p>
@@ -601,10 +726,10 @@ async function learn(text) {
       if (!memories.some(x => x.toLowerCase() === s.toLowerCase())) { memories.push(s); added++; }
     });
     if (added) { memories = memories.slice(-100); store.set('mi_memories', memories); updateModelLabel(); toast('Mémorisé automatiquement'); }
-  } catch (e) { /* silencieux */ }
+  } catch (e) { }
 }
 
-/* Extraits des discussions passées (les plus pertinentes d'abord) */
+/* Extraits des discussions passées */
 function pastDigest() {
   const last = (history.filter(m => m.role === 'user').slice(-1)[0] || {}).content || '';
   const q = last.toLowerCase().split(/\W+/).filter(w => w.length > 3);
@@ -638,7 +763,7 @@ function openApp(key) {
 window.onload = () => {
   spawnParticles();
   updateModelLabel();
-  renderHistory();   // reprend automatiquement la discussion laissée en cours
+  renderHistory();   
   if (history.length) toast('Content de te revoir : discussion reprise');
   fetchModels();
   if ('serviceWorker' in navigator && location.protocol.indexOf('http') === 0) {
